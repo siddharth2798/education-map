@@ -39,6 +39,11 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .stat b{display:block;font-size:21px;font-weight:600;line-height:1.2}
 .stat span{font-size:12.5px;color:var(--ink3)}
 
+.howto{display:flex;gap:11px;align-items:flex-start;margin:0 0 18px;padding:12px 16px;
+  background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:10px;font-size:14px}
+.howto b{font-weight:600}
+
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
 .tab{font:inherit;font-size:14.5px;font-weight:500;cursor:pointer;color:var(--ink2);
   background:none;border:none;border-bottom:2px solid transparent;
@@ -119,7 +124,7 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 
 <header>
   <h1>Education at IndiaFOSS</h1>
-  <p>Directory and network of people run initiatives on Open Source in Education.</br></br> Select yourself or anybody else from the list below to see their profile and connections.</p>
+  <p>Directory and network of people run initiatives on Open Source in Education.</p>
 </header>
 
 <!-- <div class="stats" id="stats"></div> -->
@@ -128,6 +133,9 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
   <button class="tab" role="tab" id="tab-dir" aria-controls="view-dir" aria-selected="true">Directory</button>
   <button class="tab" role="tab" id="tab-net" aria-controls="view-net" aria-selected="false">Network</button>
 </div>
+
+<p class="howto"><span aria-hidden="true"></span>
+  <span><b>Select or search for yourself or anybody else from the gathering</b> to see their profile and connections.</span></p>
 
 <div class="cols">
   <div class="left">
@@ -309,7 +317,7 @@ function renderPanel(){
   const el=document.getElementById("panel");
   if(!selected){
     el.innerHTML=`<h2>Nobody selected</h2>
-  <p class="psub">Select anyone in either view to see their role, links and collaborations. <a href="#directory">Browse the directory</a>.</p>`;    
+  <p class="psub"> <a href="#directory">Browse the directory</a>.</p>`;    
   return;
   }
   const p=byId[selected];
