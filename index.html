@@ -3,24 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a18" media="(prefers-color-scheme: dark)">
 <title>Education at IndiaFOSS</title>
 <style>
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#faf9f5; --card:#fff; --card2:#f4f2ec; --ink:#1f1f1d; --ink2:#5f5e5a; --ink3:#8b8a83;
+  --bg:#faf9f5; --card:#fff; --card2:#f4f2ec; --ink:#1f1f1d; --ink2:#5f5e5a; --ink3:#78766f;
   --line:#e3e1d8; --line2:#cfcdc2; --accent:#3d6bd6;
+  --dim:.1; --edge:.55; --shadow:0 2px 10px rgba(0,0,0,.05);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a18; --card:#232320; --card2:#2b2b27; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
-    --line:#35342f; --line2:#46453f; --accent:#7ba4f0;
+    --bg:#1a1a18; --card:#232320; --card2:#2b2b27; --ink:#f0eee6; --ink2:#bdbbb2; --ink3:#a3a199;
+    --line:#35342f; --line2:#55544d; --accent:#8fb4f5;
+    --dim:.2; --edge:.75; --shadow:0 2px 12px rgba(0,0,0,.4);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#1a1a18; --card:#232320; --card2:#2b2b27; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
-  --line:#35342f; --line2:#46453f; --accent:#7ba4f0;
+  --bg:#1a1a18; --card:#232320; --card2:#2b2b27; --ink:#f0eee6; --ink2:#bdbbb2; --ink3:#a3a199;
+  --line:#35342f; --line2:#55544d; --accent:#8fb4f5;
+  --dim:.2; --edge:.75; --shadow:0 2px 12px rgba(0,0,0,.4);
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 12px)}
@@ -56,7 +62,7 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
 .search{flex:1 1 260px;min-width:200px}
 .search input{width:100%;padding:9px 13px;font:inherit;font-size:14px;color:var(--ink);
-  background:var(--card);border:1px solid var(--line2);border-radius:9px}
+  background:var(--card);border:1px solid var(--line2);border-radius:9px;color-scheme:inherit}
 .search input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
 
 .cols{display:flex;gap:18px;align-items:flex-start}
@@ -67,7 +73,7 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;
   cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%;
   transition:border-color .15s,box-shadow .15s}
-.pcard:hover{border-color:var(--line2);box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.pcard:hover{border-color:var(--line2);box-shadow:var(--shadow)}
 .pcard:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .pcard.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .pcard .top{display:flex;gap:11px;align-items:flex-start}
@@ -112,7 +118,7 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 .node circle{cursor:pointer;stroke-width:1.5}
 .node text{font-size:11.5px;fill:var(--ink);pointer-events:none;paint-order:stroke;
   stroke:var(--card);stroke-width:3px;stroke-linejoin:round}
-.dim{opacity:.1}
+.dim{opacity:var(--dim)}
 .foot{color:var(--ink3);font-size:13px;margin-top:14px}
 .note{color:var(--ink3);font-size:12.5px;margin-top:8px}
 .nethint{display:none}
@@ -178,7 +184,7 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 </div>
 
 <p class="howto"><span aria-hidden="true"></span>
-  <span><b>Select or search for yourself or anybody else from the gathering</b> to see their profile and connections. Best viewed on a desktop.</span></p>
+  <span><b>Select or search for yourself or anybody else from the gathering</b> to see their profile and connections.</span></p>
 
 <div class="cols">
   <div class="left">
@@ -219,6 +225,7 @@ const THEMES={
   tooling:{label:"Open source tooling",color:"#BA7517"},
   curric:{label:"Curriculum",color:"#D4537E"},
   regional:{label:"Regional and networking",color:"#639922"},
+  grants:{label:"Grants and funding",color:"#5c8c9e"},
   intro:{label:"Introduced, no topic yet",color:"#888780"}
 };
 
@@ -237,7 +244,8 @@ const P=[
  {id:"Jibu Elias",role:"Lead, Responsible Computing Challenge in India",org:"Mozilla Foundation",li:"https://www.linkedin.com/in/jibuelias/",web:"https://www.mozillafoundation.org/en/"},
  {id:"Richard Hartmann",role:"Office of the CTO",org:"Grafana Labs",li:"https://www.linkedin.com/in/richih/",web:"https://grafana.com/docs/learning-hub/"},
  {id:"Vishal Arya",role:"Founder",org:"<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>",li:"https://linkedin.com/in/fossdot",web:"https://bodhya.net/"},
- {id:"Harsh Nisar",role:"Co-founder",org:"<a href=\"https://www.bharatdigital.io/\" target=\"_blank\" rel=\"noopener\"> Bharat Digital</a>",li:"https://in.linkedin.com/in/harsh-nisar-b8347588",web:"https://www.bharatdigital.io/fellowship"}
+ {id:"Harsh Nisar",role:"Co-founder",org:"<a href=\"https://www.bharatdigital.io/\" target=\"_blank\" rel=\"noopener\"> Bharat Digital</a>",li:"https://in.linkedin.com/in/harsh-nisar-b8347588",web:"https://www.bharatdigital.io/fellowship"},
+ {id:"G Vikram Chandra",role:"Assistant Professor",org:"<a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a>",li:"https://in.linkedin.com/in/vikramchandra-ml",web:"https://www.rgmcet.edu.in/"}
 ];
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
 
@@ -283,7 +291,17 @@ const E=[
 ["Vishal Arya","KC Sivaramakrishnan","regional","<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>'s work in Bihar. Leads for event speakers and mentors."],
 ["Vishal Arya","Aaditeshwar Seth","regional","<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>'s work in Bihar. Leads for event speakers and mentors."],
 ["Vishal Arya","Rinsa","curric","Curriculum work for government schools and students."],
-["Vishal Arya","Hussain Nagaria","curric","Curriculum work for government schools and students."]
+["Vishal Arya","Hussain Nagaria","curric","Curriculum work for government schools and students."],
+["G Vikram Chandra","Chandra R","tooling","Talk about projects by IT for Change, and how RGMCET students can contribute."],
+["G Vikram Chandra","Saket Choudhary","tooling","Talk about the lab you are associated with, and how RGMCET students can get involved."],
+["G Vikram Chandra","Mohit P Tahiliani","tooling","Talk about the lab you are associated with, and how RGMCET students can get involved."],
+["G Vikram Chandra","KC Sivaramakrishnan","tooling","Talk about the lab you are associated with, and how RGMCET students can get involved."],
+["G Vikram Chandra","Aaditeshwar Seth","tooling","Talk about the lab you are associated with, and how RGMCET students can get involved."],
+["G Vikram Chandra","Ankit","curric","Talk about Ankit's programme, Road to Open Source."],
+["G Vikram Chandra","James Reilly","tooling","Talk about involving students in more open source communities, projects and hiring."],
+["G Vikram Chandra","Praveen Das","grants","Grants and other opportunities for student projects."],
+["G Vikram Chandra","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a>."],
+["G Vikram Chandra","Harsh Nisar","b4b","Talk about sending your students to <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a>"]
 ];
 
 const PAL=["#7F77DD","#1D9E75","#D85A30","#378ADD","#BA7517","#D4537E","#639922","#5c8c9e"];
@@ -293,7 +311,11 @@ function hueOf(n){let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return P
 const plain=s=>String(s||"").replace(/<[^>]*>/g,"");
 const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
 const bySlug=Object.fromEntries(P.map(p=>[slug(p.id),p.id]));
-function setHash(h){ if(location.hash.slice(1)!==h) history.replaceState(null,"","#"+h) }
+let pushedForPerson=false;
+function setHash(h,push=false){
+  if(location.hash.slice(1)===h) return;
+  push ? history.pushState(null,"","#"+h) : history.replaceState(null,"","#"+h);
+}
 const isMobile=()=>window.matchMedia("(max-width:860px)").matches;
 
 const off=new Set();
@@ -405,9 +427,27 @@ function renderPanel(){
 }
 
 function select(id,updateHash=true){
+  const had=selected;
   selected=(id&&selected===id)?null:id;
+
+  /* Closing someone we pushed a history entry for: step back instead of
+     adding another entry, so the browser back button and the close button
+     land in the same place. popstate then re-renders through applyHash. */
+  if(updateHash&&had&&!selected&&pushedForPerson){
+    pushedForPerson=false;
+    history.back();
+    return;
+  }
+
   renderDir(); renderPanel(); renderNet();
-  if(updateHash) setHash(selected?slug(selected):(currentTab()==="tab-net"?"network":"directory"));
+  if(updateHash){
+    if(selected){
+      setHash(slug(selected),!pushedForPerson);   /* first open pushes, swaps replace */
+      pushedForPerson=true;
+    }else{
+      setHash(currentTab()==="tab-net"?"network":"directory");
+    }
+  }
   syncSheet();
   if(selected&&!isMobile())
     document.getElementById("panel").scrollIntoView({behavior:"smooth",block:"nearest"});
@@ -417,7 +457,8 @@ function select(id,updateHash=true){
 const svg=d3.select("#g");
 const root=svg.append("g");                  /* zoom/pan container */
 const link=root.append("g").selectAll("line").data(links).join("line")
-  .attr("stroke",d=>THEMES[d.theme].color).attr("stroke-width",1.4).attr("stroke-opacity",.55);
+  .attr("stroke",d=>THEMES[d.theme].color).attr("stroke-width",1.4)
+  .attr("stroke-opacity",getComputedStyle(document.documentElement).getPropertyValue("--edge").trim()||.55);
 const node=root.append("g").selectAll("g").data(nodes).join("g").attr("class","node")
   .on("click",(e,d)=>select(d.id));
 node.append("circle").attr("fill",d=>hueOf(d.id)).attr("fill-opacity",.9).attr("stroke","var(--card)");
@@ -488,12 +529,13 @@ document.getElementById("gaps").textContent = bits.length ? "Gaps: "+bits.join("
 
 function applyHash(){
   const h=decodeURIComponent(location.hash.slice(1)).toLowerCase();
-  if(h==="network"){ select(null,false); showTab("tab-net",false); return }
+  if(h==="network"){ pushedForPerson=false; select(null,false); showTab("tab-net",false); return }
   const id=bySlug[h];
   if(id){ select(id,false); showTab("tab-dir",false); return }
-  select(null,false); showTab("tab-dir",false);
+  pushedForPerson=false; select(null,false); showTab("tab-dir",false);
 }
 window.addEventListener("hashchange",applyHash);
+window.addEventListener("popstate",applyHash);
 layout();
 renderDir(); renderPanel(); renderNet();
 applyHash();
