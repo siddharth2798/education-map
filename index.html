@@ -53,12 +53,12 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .search input{width:100%;padding:9px 13px;font:inherit;font-size:14px;color:var(--ink);
   background:var(--card);border:1px solid var(--line2);border-radius:9px}
 .search input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
-.chip{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
+/* .chip{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
   border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;
   padding:6px 13px;font:inherit;font-size:13px;line-height:1.3;transition:opacity .15s}
 .chip.off{opacity:.36}
 .chip .dot{width:9px;height:9px;border-radius:50%;flex:none}
-.chip.all{border-style:dashed;color:var(--ink2)}
+.chip.all{border-style:dashed;color:var(--ink2)} */
 
 .cols{display:flex;gap:18px;align-items:flex-start}
 .left{flex:1 1 520px;min-width:0}
@@ -122,18 +122,18 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
   <p>People working on free and open source software in Indian education, and the collaborations between them. Select anyone in either view to see their profile and connections.</p>
 </header>
 
-<div class="stats" id="stats"></div>
+<!-- <div class="stats" id="stats"></div> -->
 
 <div class="tabs" role="tablist" aria-label="Views">
-  <button class="tab" role="tab" id="tab-net" aria-controls="view-net" aria-selected="true">Network</button>
   <button class="tab" role="tab" id="tab-dir" aria-controls="view-dir" aria-selected="false">Directory</button>
+  <button class="tab" role="tab" id="tab-net" aria-controls="view-net" aria-selected="true">Network</button>
 </div>
 
 <div class="cols">
   <div class="left">
 
     <div id="view-net" role="tabpanel" aria-labelledby="tab-net">
-      <div class="controls" id="legend"></div>
+      <!-- <div class="controls" id="legend"></div> -->
       <div class="graphbox">
         <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations"></svg>
       </div>
@@ -243,9 +243,9 @@ const themesOf={};P.forEach(p=>themesOf[p.id]=new Set());
 E.forEach(([s,t,th])=>{themesOf[s].add(th);themesOf[t].add(th)});
 
 /* ---------- stats ---------- */
-document.getElementById("stats").innerHTML=
-  [[P.length,"people"],[E.length,"connections"],[Object.keys(THEMES).length,"themes"]]
-  .map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
+// document.getElementById("stats").innerHTML=
+//   [[P.length,"people"],[E.length,"connections"],[Object.keys(THEMES).length,"themes"]]
+//   .map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
 
 /* ---------- tabs ---------- */
 const TABS=[["tab-net","view-net"],["tab-dir","view-dir"]];
@@ -297,10 +297,9 @@ function renderDir(){
 function renderPanel(){
   const el=document.getElementById("panel");
   if(!selected){
-    el.innerHTML=`<h2>Themes</h2>
-      <p class="psub">Select anyone in either view to see their role, links and collaborations.</p>
-      ${Object.values(THEMES).map(t=>`<div class="conn"><div class="who"><span class="dot" style="background:${t.color}"></span>${t.label}</div></div>`).join("")}`;
-    return;
+    el.innerHTML=`<h2>Nobody selected</h2>
+  <p class="psub">Select anyone in either view to see their role, links and collaborations. Checkout Directory to know everyone.</p>`;    
+  return;
   }
   const p=byId[selected];
   const vis=links.filter(l=>!off.has(l.theme));
@@ -373,19 +372,19 @@ function renderNet(){
   document.getElementById("count").textContent=`${vis.length} of ${links.length} connections shown.`;
 }
 
-const legend=document.getElementById("legend");
-Object.entries(THEMES).forEach(([k,v])=>{
-  const el=document.createElement("button");
-  el.className="chip";
-  el.innerHTML=`<span class="dot" style="background:${v.color}"></span>${v.label}`;
-  el.onclick=()=>{off.has(k)?off.delete(k):off.add(k);el.classList.toggle("off");renderNet();renderPanel()};
-  legend.appendChild(el);
-});
-const rst=document.createElement("button");
-rst.className="chip all"; rst.textContent="Reset";
-rst.onclick=()=>{off.clear();selected=null;query="";document.getElementById("q").value="";
-  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("off"));renderDir();renderPanel();renderNet()};
-legend.appendChild(rst);
+// const legend=document.getElementById("legend");
+// Object.entries(THEMES).forEach(([k,v])=>{
+//   const el=document.createElement("button");
+//   el.className="chip";
+//   el.innerHTML=`<span class="dot" style="background:${v.color}"></span>${v.label}`;
+//   el.onclick=()=>{off.has(k)?off.delete(k):off.add(k);el.classList.toggle("off");renderNet();renderPanel()};
+//   legend.appendChild(el);
+// });
+// const rst=document.createElement("button");
+// rst.className="chip all"; rst.textContent="Reset";
+// rst.onclick=()=>{off.clear();selected=null;query="";document.getElementById("q").value="";
+//   document.querySelectorAll(".chip").forEach(c=>c.classList.remove("off"));renderDir();renderPanel();renderNet()};
+// legend.appendChild(rst);
 
 const noDetails=P.filter(p=>!p.org&&!p.role).map(p=>p.id);
 const noLinks=P.filter(p=>deg[p.id]===0).map(p=>p.id);
