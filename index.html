@@ -58,17 +58,10 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .search input{width:100%;padding:9px 13px;font:inherit;font-size:14px;color:var(--ink);
   background:var(--card);border:1px solid var(--line2);border-radius:9px}
 .search input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
-/* .chip{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
-  border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;
-  padding:6px 13px;font:inherit;font-size:13px;line-height:1.3;transition:opacity .15s}
-.chip.off{opacity:.36}
-.chip .dot{width:9px;height:9px;border-radius:50%;flex:none}
-.chip.all{border-style:dashed;color:var(--ink2)} */
 
 .cols{display:flex;gap:18px;align-items:flex-start}
 .left{flex:1 1 520px;min-width:0}
 .right{flex:0 1 330px;min-width:270px;position:sticky;top:12px}
-@media (max-width:860px){ .cols{flex-direction:column} .right{position:static;width:100%;flex-basis:auto} }
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;
@@ -89,6 +82,8 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .dots i{width:7px;height:7px;border-radius:50%;display:block}
 .nconn{font-size:12px;color:var(--ink3)}
 
+.right.novis{display:none}
+
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
 .panel .ptop{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
 .panel h2{font-size:17px;font-weight:600;margin:0;line-height:1.25}
@@ -103,9 +98,12 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .conn .who .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .conn .what{font-size:12.5px;color:var(--ink2);margin-top:1px}
 .empty{color:var(--ink3);font-size:13.5px}
-.closebtn{flex:none;margin:-3px -4px 0 auto;width:28px;height:28px;display:grid;place-items:center;
-  font:inherit;font-size:17px;line-height:1;cursor:pointer;color:var(--ink3);
-  background:none;border:none;border-radius:7px;transition:background .15s,color .15s}
+.closebtn{position:relative;flex:none;margin:-3px -4px 0 auto;width:28px;height:28px;
+  display:grid;place-items:center;font:inherit;font-size:17px;line-height:1;cursor:pointer;
+  color:var(--ink3);background:none;border:none;border-radius:7px;
+  transition:background .15s,color .15s}
+.closebtn::after{content:"";position:absolute;top:50%;left:50%;
+  width:44px;height:44px;transform:translate(-50%,-50%)}
 .closebtn:hover{background:var(--card2);color:var(--ink)}
 .closebtn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
@@ -117,6 +115,51 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 .dim{opacity:.1}
 .foot{color:var(--ink3);font-size:13px;margin-top:14px}
 .note{color:var(--ink3);font-size:12.5px;margin-top:8px}
+.nethint{display:none}
+
+/* ============ MOBILE ============ */
+@media (max-width:860px){
+  .wrap{padding:16px 14px 28px}
+  header h1{font-size:20px}
+  header p{display:none}                       /* trimmed: title + callout carry it */
+  .howto{margin:0 0 14px;padding:10px 13px;font-size:13.5px;gap:8px}
+
+  .tabs{position:sticky;top:0;z-index:6;background:var(--bg);margin-bottom:12px}
+  .tab{padding:12px 16px;min-height:44px}      /* 44px tap target */
+
+  #view-dir .controls{position:sticky;top:45px;z-index:5;background:var(--bg);
+    padding:6px 0 8px;margin-bottom:8px}
+  .search input{font-size:16px;padding:11px 13px}  /* 16px stops iOS zoom-on-focus */
+
+  .cols{flex-direction:column;gap:0}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .pcard{padding:12px}
+  .pcard:active{border-color:var(--accent)}
+  .av{width:32px;height:32px;border-radius:8px}
+  .pfoot{margin-top:9px;padding-top:8px}
+
+  #count,#gaps{display:none}                   /* debug readouts, not for phones */
+  .nethint{display:block;color:var(--ink3);font-size:12.5px;margin:0 0 10px}
+  svg{touch-action:none}                        /* let d3.zoom own the gestures */
+
+  /* ---- detail panel goes full screen ---- */
+  .right{position:fixed;inset:0;z-index:60;min-width:0;background:var(--bg);
+    overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+    padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+    animation:slideUp .22s cubic-bezier(.32,.72,0,1)}
+  @keyframes slideUp{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+
+  .panel{border:none;border-radius:0;background:var(--bg);min-height:100%;
+    padding:0 16px calc(28px + env(safe-area-inset-bottom,0px))}
+  .panel .ptop{position:sticky;top:0;z-index:1;background:var(--bg);
+    padding:14px 0 12px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+  .panel h2{font-size:19px}
+  .meta{font-size:13.5px;padding:10px 0}
+  .conn{padding:11px 0}
+  .conn .what{font-size:13px}
+  .closebtn{width:40px;height:40px;font-size:24px;margin:-6px -8px 0 auto;
+    background:var(--card2);color:var(--ink2)}
+}
 </style>
 </head>
 <body>
@@ -135,13 +178,14 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 </div>
 
 <p class="howto"><span aria-hidden="true"></span>
-  <span><b>Select or search for yourself or anybody else from the gathering</b> to see their profile and connections.</span></p>
+  <span><b>Select or search for yourself or anybody else from the gathering</b> to see their profile and connections. Best viewed on a desktop.</span></p>
 
 <div class="cols">
   <div class="left">
 
     <div id="view-net" role="tabpanel" aria-labelledby="tab-net" hidden>
       <!-- <div class="controls" id="legend"></div> -->
+      <p class="nethint">Pinch to zoom, drag to pan. Tap a name for their profile.</p>
       <div class="graphbox">
         <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations"></svg>
       </div>
@@ -158,7 +202,7 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
     </div>
 
   </div>
-  <aside class="right">
+  <aside class="right" id="sheet">
     <div class="panel" id="panel"></div>
   </aside>
 </div>
@@ -192,7 +236,7 @@ const P=[
  {id:"Praveen Das",role:"Lead Partnerships Manager, South Asia",org:"Wikimedia Foundation",li:"https://www.linkedin.com/in/praveen-das-pdas/",web:"https://wikimediafoundation.org/"},
  {id:"Jibu Elias",role:"Lead, Responsible Computing Challenge in India",org:"Mozilla Foundation",li:"https://www.linkedin.com/in/jibuelias/",web:"https://www.mozillafoundation.org/en/"},
  {id:"Richard Hartmann",role:"Office of the CTO",org:"Grafana Labs",li:"https://www.linkedin.com/in/richih/",web:"https://grafana.com/docs/learning-hub/"},
- {id:"Vishal Arya",role:"Founder",org:"<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>",li:"https://linkedin.com/in/fossdot",web:"https://<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>.net/"},
+ {id:"Vishal Arya",role:"Founder",org:"<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>",li:"https://linkedin.com/in/fossdot",web:"https://bodhya.net/"},
  {id:"Harsh Nisar",role:"Co-founder",org:"<a href=\"https://www.bharatdigital.io/\" target=\"_blank\" rel=\"noopener\"> Bharat Digital</a>",li:"https://in.linkedin.com/in/harsh-nisar-b8347588",web:"https://www.bharatdigital.io/fellowship"}
 ];
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
@@ -204,7 +248,7 @@ const E=[
 ["Ankit","Jibu Elias","osai","Talk about Open source AI in education."],
 ["KC Sivaramakrishnan","Jibu Elias","osai","Talk about Open source AI in education."],
 ["Aaditeshwar Seth","Jibu Elias","osai","Talk about Open source AI in education."],
-["Saket Choudhary","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a></a> and other events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>."],
+["Saket Choudhary","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and other events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>."],
 ["Mohit P Tahiliani","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
 ["Dr. Sunil TT","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
 ["Ankit","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>."],
@@ -246,6 +290,11 @@ const PAL=["#7F77DD","#1D9E75","#D85A30","#378ADD","#BA7517","#D4537E","#639922"
 function initials(n){const w=n.replace("Dr. ","").split(" ").filter(Boolean);
   return ((w[0]?.[0]||"")+(w[1]?.[0]||"")).toUpperCase()}
 function hueOf(n){let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return PAL[h%PAL.length]}
+const plain=s=>String(s||"").replace(/<[^>]*>/g,"");
+const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+const bySlug=Object.fromEntries(P.map(p=>[slug(p.id),p.id]));
+function setHash(h){ if(location.hash.slice(1)!==h) history.replaceState(null,"","#"+h) }
+const isMobile=()=>window.matchMedia("(max-width:860px)").matches;
 
 const off=new Set();
 let selected=null, query="";
@@ -271,6 +320,7 @@ function showTab(id,updateHash=true){
     document.getElementById(v).hidden=!on;
   });
   if(updateHash&&!selected) setHash(id==="tab-net"?"network":"directory");
+  syncSheet();
 }
 function currentTab(){
   return document.getElementById("tab-net").getAttribute("aria-selected")==="true"?"tab-net":"tab-dir";
@@ -286,9 +336,20 @@ TABS.forEach(([t])=>{
   };
 });
 
+/* ---------- bottom sheet (mobile only) ---------- */
+const sheet=document.getElementById("sheet");
+
+/* The panel exists only while someone is selected. On mobile it covers the
+   whole screen; on desktop it is the side column. Nothing is shown otherwise. */
+function syncSheet(){
+  sheet.classList.toggle("novis",!selected);
+  document.body.style.overflow=(selected&&isMobile())?"hidden":"";
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&selected) select(null) });
+
 /* ---------- directory ---------- */
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderDir()});
-function passes(p){ return !query || (p.id+" "+p.role+" "+p.org).toLowerCase().includes(query) }
+function passes(p){ return !query || plain(p.id+" "+p.role+" "+p.org).toLowerCase().includes(query) }
 
 function renderDir(){
   const list=P.filter(passes);
@@ -300,7 +361,7 @@ function renderDir(){
         <span style="min-width:0">
           <span class="pname">${p.id}</span>
           ${p.role?`<div class="prole">${p.role}</div>`:""}
-          <div class="porg">${p.org||"Organisation not recorded"}</div>
+          <div class="porg">${plain(p.org)||"Organisation not recorded"}</div>
         </span>
       </div>
       <div class="pfoot">
@@ -315,11 +376,7 @@ function renderDir(){
 /* ---------- detail panel ---------- */
 function renderPanel(){
   const el=document.getElementById("panel");
-  if(!selected){
-    el.innerHTML=`<h2>Nobody selected</h2>
-  <p class="psub"> <a href="#directory">Browse the directory</a>.</p>`;    
-  return;
-  }
+  if(!selected){ el.innerHTML=""; return; }
   const p=byId[selected];
   const vis=links.filter(l=>!off.has(l.theme));
   const mine=vis.filter(l=>l.source.id===selected||l.target.id===selected);
@@ -334,7 +391,7 @@ function renderPanel(){
     <div class="ptop">
       <span class="av" style="background:${hueOf(p.id)}">${initials(p.id)}</span>
       <span style="min-width:0"><h2>${p.id}</h2>
-      <div class="psub">${[p.role,p.org].filter(Boolean).join(" · ")||"Details not recorded"}</div></span>
+      <div class="psub">${[p.role,plain(p.org)].filter(Boolean).join(" · ")||"Details not recorded"}</div></span>
       <button class="closebtn" id="clr" title="Clear selection" aria-label="Clear selection">&times;</button>
     </div>
     <dl style="margin:0">${rows.map(([k,v])=>`<div class="meta"><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
@@ -344,38 +401,60 @@ function renderPanel(){
       return `<div class="conn"><div class="who"><span class="dot" style="background:${THEMES[l.theme].color}"></span>${o}</div><div class="what">${l.text}</div></div>`;
     }).join("")||`<p class="empty">No connections in the visible themes.</p>`}`;
   document.getElementById("clr").onclick=()=>select(null);
+  el.scrollTop=0;
 }
 
 function select(id,updateHash=true){
   selected=(id&&selected===id)?null:id;
   renderDir(); renderPanel(); renderNet();
-  if (updateHash) setHash(selected?`person:${selected}`:currentTab()==="tab-net"?"network":"directory");
-  if(selected&&window.matchMedia("(max-width:860px)").matches)
+  if(updateHash) setHash(selected?slug(selected):(currentTab()==="tab-net"?"network":"directory"));
+  syncSheet();
+  if(selected&&!isMobile())
     document.getElementById("panel").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
 /* ---------- network ---------- */
-const svg=d3.select("#g"), W=720, H=620;
-const link=svg.append("g").selectAll("line").data(links).join("line")
+const svg=d3.select("#g");
+const root=svg.append("g");                  /* zoom/pan container */
+const link=root.append("g").selectAll("line").data(links).join("line")
   .attr("stroke",d=>THEMES[d.theme].color).attr("stroke-width",1.4).attr("stroke-opacity",.55);
-const node=svg.append("g").selectAll("g").data(nodes).join("g").attr("class","node")
+const node=root.append("g").selectAll("g").data(nodes).join("g").attr("class","node")
   .on("click",(e,d)=>select(d.id));
-node.append("circle").attr("r",d=>6+Math.min(deg[d.id],8)*.9)
-  .attr("fill",d=>hueOf(d.id)).attr("fill-opacity",.9).attr("stroke","var(--card)");
-node.append("text").attr("text-anchor","middle")
-  .attr("dy",d=>-(10+Math.min(deg[d.id],8)*.9))
-  .text(d=>d.id.replace("Dr. ","").split(" ").slice(0,2).join(" "));
+node.append("circle").attr("fill",d=>hueOf(d.id)).attr("fill-opacity",.9).attr("stroke","var(--card)");
+node.append("circle").attr("class","hit").attr("r",22).attr("fill","transparent");  /* tap target */
+node.append("text").attr("text-anchor","middle");
 
-const sim=d3.forceSimulation(nodes)
-  .force("link",d3.forceLink(links).id(d=>d.id).distance(110).strength(.35))
-  .force("charge",d3.forceManyBody().strength(-620))
-  .force("center",d3.forceCenter(W/2,H/2))
-  .force("collide",d3.forceCollide(48))
-  .on("tick",()=>{
-    nodes.forEach(d=>{d.x=Math.max(60,Math.min(W-60,d.x));d.y=Math.max(34,Math.min(H-24,d.y))});
-    link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
-    node.attr("transform",d=>`translate(${d.x},${d.y})`);
-  });
+const zoom=d3.zoom().scaleExtent([.5,4]).on("zoom",e=>root.attr("transform",e.transform));
+svg.call(zoom).on("dblclick.zoom",null);
+
+let W,H,sim;
+function layout(){
+  const m=isMobile();
+  W=m?380:720; H=m?560:620;
+  svg.attr("viewBox",`0 0 ${W} ${H}`);
+  node.select("circle:not(.hit)").attr("r",d=>(m?5:6)+Math.min(deg[d.id],8)*(m?.7:.9));
+  node.select("text")
+    .attr("font-size",m?10:11.5)
+    .attr("dy",d=>-((m?9:10)+Math.min(deg[d.id],8)*(m?.7:.9)))
+    .text(d=>{
+      const n=d.id.replace("Dr. ","");
+      return m?n.split(" ")[0]:n.split(" ").slice(0,2).join(" ");
+    });
+  if(sim) sim.stop();
+  sim=d3.forceSimulation(nodes)
+    .force("link",d3.forceLink(links).id(d=>d.id).distance(m?62:110).strength(.35))
+    .force("charge",d3.forceManyBody().strength(m?-240:-620))
+    .force("center",d3.forceCenter(W/2,H/2))
+    .force("collide",d3.forceCollide(m?26:48))
+    .on("tick",()=>{
+      const pad=m?34:60;
+      nodes.forEach(d=>{d.x=Math.max(pad,Math.min(W-pad,d.x));d.y=Math.max(m?22:34,Math.min(H-24,d.y))});
+      link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+      node.attr("transform",d=>`translate(${d.x},${d.y})`);
+    });
+  sim.alpha(1).restart();
+}
+
 node.call(d3.drag()
   .on("start",(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y})
   .on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y})
@@ -392,19 +471,13 @@ function renderNet(){
   document.getElementById("count").textContent=`${vis.length} of ${links.length} connections shown.`;
 }
 
-// const legend=document.getElementById("legend");
-// Object.entries(THEMES).forEach(([k,v])=>{
-//   const el=document.createElement("button");
-//   el.className="chip";
-//   el.innerHTML=`<span class="dot" style="background:${v.color}"></span>${v.label}`;
-//   el.onclick=()=>{off.has(k)?off.delete(k):off.add(k);el.classList.toggle("off");renderNet();renderPanel()};
-//   legend.appendChild(el);
-// });
-// const rst=document.createElement("button");
-// rst.className="chip all"; rst.textContent="Reset";
-// rst.onclick=()=>{off.clear();selected=null;query="";document.getElementById("q").value="";
-//   document.querySelectorAll(".chip").forEach(c=>c.classList.remove("off"));renderDir();renderPanel();renderNet()};
-// legend.appendChild(rst);
+let wasMobile=isMobile(), rt=null;
+window.addEventListener("resize",()=>{
+  clearTimeout(rt);
+  rt=setTimeout(()=>{
+    if(isMobile()!==wasMobile){ wasMobile=isMobile(); layout(); syncSheet(); }
+  },180);
+});
 
 const noDetails=P.filter(p=>!p.org&&!p.role).map(p=>p.id);
 const noLinks=P.filter(p=>deg[p.id]===0).map(p=>p.id);
@@ -421,6 +494,7 @@ function applyHash(){
   select(null,false); showTab("tab-dir",false);
 }
 window.addEventListener("hashchange",applyHash);
+layout();
 renderDir(); renderPanel(); renderNet();
 applyHash();
 </script>
