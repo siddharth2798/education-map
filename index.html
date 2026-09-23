@@ -125,14 +125,14 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 <!-- <div class="stats" id="stats"></div> -->
 
 <div class="tabs" role="tablist" aria-label="Views">
-  <button class="tab" role="tab" id="tab-dir" aria-controls="view-dir" aria-selected="false">Directory</button>
-  <button class="tab" role="tab" id="tab-net" aria-controls="view-net" aria-selected="true">Network</button>
+  <button class="tab" role="tab" id="tab-dir" aria-controls="view-dir" aria-selected="true">Directory</button>
+  <button class="tab" role="tab" id="tab-net" aria-controls="view-net" aria-selected="false">Network</button>
 </div>
 
 <div class="cols">
   <div class="left">
 
-    <div id="view-net" role="tabpanel" aria-labelledby="tab-net">
+    <div id="view-net" role="tabpanel" aria-labelledby="tab-net" hidden>
       <!-- <div class="controls" id="legend"></div> -->
       <div class="graphbox">
         <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations"></svg>
@@ -141,7 +141,7 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
       <p class="note" id="gaps"></p>
     </div>
 
-    <div id="view-dir" role="tabpanel" aria-labelledby="tab-dir" hidden>
+    <div id="view-dir" role="tabpanel" aria-labelledby="tab-dir" >
       <div class="controls">
         <div class="search"><input id="q" type="search" placeholder="Search name, role or organisation" autocomplete="off" aria-label="Search the directory"></div>
       </div>
@@ -248,13 +248,17 @@ E.forEach(([s,t,th])=>{themesOf[s].add(th);themesOf[t].add(th)});
 //   .map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
 
 /* ---------- tabs ---------- */
-const TABS=[["tab-net","view-net"],["tab-dir","view-dir"]];
-function showTab(id){
+const TABS=[["tab-dir","view-dir"],["tab-net","view-net"]];
+function showTab(id,updateHash=true){
   TABS.forEach(([t,v])=>{
     const on=t===id;
     document.getElementById(t).setAttribute("aria-selected",on);
     document.getElementById(v).hidden=!on;
   });
+  if(updateHash&&!selected) setHash(id==="tab-net"?"network":"directory");
+}
+function currentTab(){
+  return document.getElementById("tab-net").getAttribute("aria-selected")==="true"?"tab-net":"tab-dir";
 }
 TABS.forEach(([t])=>{
   const el=document.getElementById(t);
@@ -298,7 +302,7 @@ function renderPanel(){
   const el=document.getElementById("panel");
   if(!selected){
     el.innerHTML=`<h2>Nobody selected</h2>
-  <p class="psub">Select anyone in either view to see their role, links and collaborations. Checkout Directory to know everyone.</p>`;    
+  <p class="psub">Select anyone in either view to see their role, links and collaborations. <a href="#directory">Browse the directory</a>.</p>`;    
   return;
   }
   const p=byId[selected];
@@ -327,9 +331,10 @@ function renderPanel(){
   document.getElementById("clr").onclick=()=>select(null);
 }
 
-function select(id){
+function select(id,updateHash=true){
   selected=(id&&selected===id)?null:id;
   renderDir(); renderPanel(); renderNet();
+  if (updateHash) setHash(selected?`person:${selected}`:currentTab()==="tab-net"?"network":"directory");
   if(selected&&window.matchMedia("(max-width:860px)").matches)
     document.getElementById("panel").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
@@ -393,8 +398,16 @@ if(noLinks.length) bits.push(`${noLinks.join(", ")} ${noLinks.length===1?"has":"
 if(noDetails.length) bits.push(`${noDetails.join(", ")} ${noDetails.length===1?"has":"have"} no directory details.`);
 document.getElementById("gaps").textContent = bits.length ? "Gaps: "+bits.join(" ") : "";
 
-showTab("tab-net");
+function applyHash(){
+  const h=decodeURIComponent(location.hash.slice(1)).toLowerCase();
+  if(h==="network"){ select(null,false); showTab("tab-net",false); return }
+  const id=bySlug[h];
+  if(id){ select(id,false); showTab("tab-dir",false); return }
+  select(null,false); showTab("tab-dir",false);
+}
+window.addEventListener("hashchange",applyHash);
 renderDir(); renderPanel(); renderNet();
+applyHash();
 </script>
 </body>
 </html>
