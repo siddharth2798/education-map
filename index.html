@@ -11,25 +11,16 @@
   padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#faf9f5; --card:#fff; --card2:#f4f2ec; --ink:#1f1f1d; --ink2:#5f5e5a; --ink3:#8b8a83;
   --line:#e3e1d8; --line2:#cfcdc2; --accent:#3d6bd6;
-  --ok-bg:#e6f2ea; --ok-ink:#186a42;
-  --inv-bg:#fdf1de; --inv-ink:#8a5510;
-  --no-bg:#f0eeea; --no-ink:#7a7873;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1a1a18; --card:#232320; --card2:#2b2b27; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
     --line:#35342f; --line2:#46453f; --accent:#7ba4f0;
-    --ok-bg:#1d3a2b; --ok-ink:#7fd0a3;
-    --inv-bg:#3a2e1a; --inv-ink:#e0b271;
-    --no-bg:#302f2b; --no-ink:#9b9990;
   }
 }
 :root[data-theme="dark"]{
   --bg:#1a1a18; --card:#232320; --card2:#2b2b27; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
   --line:#35342f; --line2:#46453f; --accent:#7ba4f0;
-  --ok-bg:#1d3a2b; --ok-ink:#7fd0a3;
-  --inv-bg:#3a2e1a; --inv-ink:#e0b271;
-  --no-bg:#302f2b; --no-ink:#9b9990;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 12px)}
@@ -48,14 +39,23 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .stat b{display:block;font-size:21px;font-weight:600;line-height:1.2}
 .stat span{font-size:12.5px;color:var(--ink3)}
 
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px}
+.tab{font:inherit;font-size:14.5px;font-weight:500;cursor:pointer;color:var(--ink2);
+  background:none;border:none;border-bottom:2px solid transparent;
+  padding:9px 15px;margin-bottom:-1px;transition:color .15s,border-color .15s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:6px 6px 0 0}
+[hidden]{display:none !important}
+
 .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-.search{flex:1 1 260px;min-width:200px;position:relative}
+.search{flex:1 1 260px;min-width:200px}
 .search input{width:100%;padding:9px 13px;font:inherit;font-size:14px;color:var(--ink);
   background:var(--card);border:1px solid var(--line2);border-radius:9px}
 .search input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
 .chip{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
   border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;
-  padding:6px 13px;font:inherit;font-size:13px;line-height:1.3;transition:opacity .15s,background .15s}
+  padding:6px 13px;font:inherit;font-size:13px;line-height:1.3;transition:opacity .15s}
 .chip.off{opacity:.36}
 .chip .dot{width:9px;height:9px;border-radius:50%;flex:none}
 .chip.all{border-style:dashed;color:var(--ink2)}
@@ -68,7 +68,7 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;
   cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%;
-  transition:border-color .15s,box-shadow .15s,transform .1s}
+  transition:border-color .15s,box-shadow .15s}
 .pcard:hover{border-color:var(--line2);box-shadow:0 2px 10px rgba(0,0,0,.05)}
 .pcard:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .pcard.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
@@ -83,10 +83,6 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .dots{display:flex;gap:3px}
 .dots i{width:7px;height:7px;border-radius:50%;display:block}
 .nconn{font-size:12px;color:var(--ink3)}
-.badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;letter-spacing:.02em}
-.b-acc{background:var(--ok-bg);color:var(--ok-ink)}
-.b-inv{background:var(--inv-bg);color:var(--inv-ink)}
-.b-rej{background:var(--no-bg);color:var(--no-ink)}
 
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
 .panel .ptop{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
@@ -102,12 +98,12 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .conn .who .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .conn .what{font-size:12.5px;color:var(--ink2);margin-top:1px}
 .empty{color:var(--ink3);font-size:13.5px}
-.clearbtn{margin-top:14px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink2);
-  background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+.closebtn{flex:none;margin:-3px -4px 0 auto;width:28px;height:28px;display:grid;place-items:center;
+  font:inherit;font-size:17px;line-height:1;cursor:pointer;color:var(--ink3);
+  background:none;border:none;border-radius:7px;transition:background .15s,color .15s}
+.closebtn:hover{background:var(--card2);color:var(--ink)}
+.closebtn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
-section.net{margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
-section.net h2{font-size:18px;font-weight:600;margin:0 0 3px}
-section.net p.lead{color:var(--ink2);font-size:14px;margin:0 0 16px;max-width:64ch}
 .graphbox{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 svg{display:block;width:100%;height:auto;touch-action:manipulation}
 .node circle{cursor:pointer;stroke-width:1.5}
@@ -123,36 +119,41 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 
 <header>
   <h1>Education and IndiaFOSS mapping</h1>
-  <p>People working on free and open source software in Indian education, and the collaborations between them. Search or filter the directory, then select anyone to see their profile and connections.</p>
+  <p>People working on free and open source software in Indian education, and the collaborations between them. Select anyone in either view to see their profile and connections.</p>
 </header>
 
 <div class="stats" id="stats"></div>
 
-<div class="controls">
-  <div class="search"><input id="q" type="search" placeholder="Search name, role or organisation" autocomplete="off" aria-label="Search the directory"></div>
-  <div id="statusChips" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+<div class="tabs" role="tablist" aria-label="Views">
+  <button class="tab" role="tab" id="tab-net" aria-controls="view-net" aria-selected="true">Network</button>
+  <button class="tab" role="tab" id="tab-dir" aria-controls="view-dir" aria-selected="false">Directory</button>
 </div>
 
 <div class="cols">
   <div class="left">
-    <div class="grid" id="grid"></div>
-    <p class="foot" id="dirCount"></p>
+
+    <div id="view-net" role="tabpanel" aria-labelledby="tab-net">
+      <div class="controls" id="legend"></div>
+      <div class="graphbox">
+        <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations"></svg>
+      </div>
+      <p class="foot" id="count"></p>
+      <p class="note" id="gaps"></p>
+    </div>
+
+    <div id="view-dir" role="tabpanel" aria-labelledby="tab-dir" hidden>
+      <div class="controls">
+        <div class="search"><input id="q" type="search" placeholder="Search name, role or organisation" autocomplete="off" aria-label="Search the directory"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="foot" id="dirCount"></p>
+    </div>
+
   </div>
   <aside class="right">
     <div class="panel" id="panel"></div>
   </aside>
 </div>
-
-<section class="net">
-  <h2>How they connect</h2>
-  <p class="lead">Each line is a possible collaboration, coloured by theme. Selecting a person here updates the directory panel above. Nodes can be dragged.</p>
-  <div class="controls" id="legend"></div>
-  <div class="graphbox">
-    <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations"></svg>
-  </div>
-  <p class="foot" id="count"></p>
-  <p class="note" id="gaps"></p>
-</section>
 
 </div>
 
@@ -170,22 +171,21 @@ const THEMES={
 };
 
 const P=[
- {id:"Aalok Thakkar",role:"",org:"Ashoka",li:"https://www.linkedin.com/in/aalokthakkar/",web:"",status:"Rejected"},
- {id:"Chandra R",role:"Head of Technology",org:"IT For Change",li:"",web:"https://itforchange.net/",status:"Accepted"},
- {id:"Saket Choudhary",role:"Assistant Professor, Koita Centre for Digital Health",org:"IIT Bombay",li:"https://www.linkedin.com/in/saket-choudhary/",web:"https://www.kcdh.iitb.ac.in/",status:"Accepted"},
- {id:"Mohit P Tahiliani",role:"Associate Professor",org:"NITK Surathkal / COSH",li:"https://in.linkedin.com/in/mohittahiliani",web:"https://cosh.nitk.ac.in/about",status:"Accepted"},
- {id:"Hussain Nagaria",role:"Founder",org:"CS17 / BWH",li:"https://linkedin.com/in/buildwithhussain",web:"https://cs17.org/",status:"Accepted"},
- {id:"Dr. Sunil TT",role:"Director",org:"ICFOSS",li:"https://www.linkedin.com/in/vu2swx/",web:"https://icfoss.in/",status:"Accepted"},
- {id:"Rinsa",role:"Co-founder and CEO",org:"TinkerQubits",li:"https://www.linkedin.com/in/rinsa-perapadan-64200029/",web:"https://www.tinkerqubits.org/",status:"Accepted"},
- {id:"Ankit",role:"Coordinator",org:"Open Knowledge Initiatives",li:"https://www.linkedin.com/in/ankit-kumar-verma-081804160/",web:"https://meta.wikimedia.org/wiki/IIITH-OKI",status:"Accepted"},
- {id:"KC Sivaramakrishnan",role:"Assistant Professor",org:"IIT Madras / FP Launchpad",li:"https://www.linkedin.com/in/kc-sivaramakrishnan-25061a14/",web:"https://fplaunchpad.org/",status:"Invited"},
- {id:"Aaditeshwar Seth",role:"Professor",org:"IIT Delhi / CoRE Stack",li:"https://www.linkedin.com/in/aaditeshwarseth/",web:"https://core-stack.org/",status:"Invited"},
- {id:"James Reilly",role:"",org:"Lucknow Community",li:"https://in.linkedin.com/in/jreilly112",web:"",status:"Accepted"},
- {id:"Praveen Das",role:"Lead Partnerships Manager, South Asia",org:"Wikimedia Foundation",li:"https://www.linkedin.com/in/praveen-das-pdas/",web:"https://wikimediafoundation.org/",status:"Accepted"},
- {id:"Jibu Elias",role:"Lead, Responsible Computing Challenge in India",org:"Mozilla Foundation",li:"https://www.linkedin.com/in/jibuelias/",web:"https://www.mozillafoundation.org/en/",status:"Accepted"},
- {id:"Richard Hartmann",role:"Office of the CTO",org:"Grafana Labs",li:"https://www.linkedin.com/in/richih/",web:"https://grafana.com/docs/learning-hub/",status:"Accepted"},
- {id:"Vishal Arya",role:"Founder",org:"Bodhya",li:"https://linkedin.com/in/fossdot",web:"https://bodhya.net/",status:"Accepted"},
- {id:"Harsh Nisar",role:"",org:"",li:"",web:"",status:""}
+ {id:"Chandra R",role:"Head of Technology",org:"IT For Change",li:"",web:"https://itforchange.net/"},
+ {id:"Saket Choudhary",role:"Assistant Professor, Koita Centre for Digital Health",org:"IIT Bombay",li:"https://www.linkedin.com/in/saket-choudhary/",web:"https://www.kcdh.iitb.ac.in/"},
+ {id:"Mohit P Tahiliani",role:"Associate Professor",org:"NITK Surathkal / COSH",li:"https://in.linkedin.com/in/mohittahiliani",web:"https://cosh.nitk.ac.in/about"},
+ {id:"Hussain Nagaria",role:"Founder",org:"CS17 / BWH",li:"https://linkedin.com/in/buildwithhussain",web:"https://cs17.org/"},
+ {id:"Dr. Sunil TT",role:"Director",org:"ICFOSS",li:"https://www.linkedin.com/in/vu2swx/",web:"https://icfoss.in/"},
+ {id:"Rinsa",role:"Co-founder and CEO",org:"TinkerQubits",li:"https://www.linkedin.com/in/rinsa-perapadan-64200029/",web:"https://www.tinkerqubits.org/"},
+ {id:"Ankit",role:"Coordinator",org:"Open Knowledge Initiatives",li:"https://www.linkedin.com/in/ankit-kumar-verma-081804160/",web:"https://meta.wikimedia.org/wiki/IIITH-OKI"},
+ {id:"KC Sivaramakrishnan",role:"Assistant Professor",org:"IIT Madras / FP Launchpad",li:"https://www.linkedin.com/in/kc-sivaramakrishnan-25061a14/",web:"https://fplaunchpad.org/"},
+ {id:"Aaditeshwar Seth",role:"Professor",org:"IIT Delhi / CoRE Stack",li:"https://www.linkedin.com/in/aaditeshwarseth/",web:"https://core-stack.org/"},
+ {id:"James Reilly",role:"",org:"Lucknow Community",li:"https://in.linkedin.com/in/jreilly112",web:""},
+ {id:"Praveen Das",role:"Lead Partnerships Manager, South Asia",org:"Wikimedia Foundation",li:"https://www.linkedin.com/in/praveen-das-pdas/",web:"https://wikimediafoundation.org/"},
+ {id:"Jibu Elias",role:"Lead, Responsible Computing Challenge in India",org:"Mozilla Foundation",li:"https://www.linkedin.com/in/jibuelias/",web:"https://www.mozillafoundation.org/en/"},
+ {id:"Richard Hartmann",role:"Office of the CTO",org:"Grafana Labs",li:"https://www.linkedin.com/in/richih/",web:"https://grafana.com/docs/learning-hub/"},
+ {id:"Vishal Arya",role:"Founder",org:"Bodhya",li:"https://linkedin.com/in/fossdot",web:"https://bodhya.net/"},
+ {id:"Harsh Nisar",role:"",org:"",li:"",web:""}
 ];
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
 
@@ -233,9 +233,8 @@ const PAL=["#7F77DD","#1D9E75","#D85A30","#378ADD","#BA7517","#D4537E","#639922"
 function initials(n){const w=n.replace("Dr. ","").split(" ").filter(Boolean);
   return ((w[0]?.[0]||"")+(w[1]?.[0]||"")).toUpperCase()}
 function hueOf(n){let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))>>>0;return PAL[h%PAL.length]}
-function badgeClass(s){return s==="Accepted"?"b-acc":s==="Invited"?"b-inv":"b-rej"}
 
-const off=new Set(), statusOff=new Set();
+const off=new Set();
 let selected=null, query="";
 
 const nodes=P.map(p=>({id:p.id}));
@@ -246,52 +245,52 @@ const themesOf={};P.forEach(p=>themesOf[p.id]=new Set());
 E.forEach(([s,t,th])=>{themesOf[s].add(th);themesOf[t].add(th)});
 
 /* ---------- stats ---------- */
-(function(){
-  const n=P.length, acc=P.filter(p=>p.status==="Accepted").length,
-        inv=P.filter(p=>p.status==="Invited").length;
-  document.getElementById("stats").innerHTML=
-    [[n,"people"],[acc,"accepted"],[inv,"invited"],[E.length,"connections"],
-     [Object.keys(THEMES).length,"themes"]]
-    .map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
-})();
+document.getElementById("stats").innerHTML=
+  [[P.length,"people"],[E.length,"connections"],[Object.keys(THEMES).length,"themes"]]
+  .map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
 
-/* ---------- filters ---------- */
-const STATUSES=["Accepted","Invited","Rejected"];
-const sc=document.getElementById("statusChips");
-STATUSES.forEach(s=>{
-  const el=document.createElement("button");
-  el.className="chip"; el.textContent=s;
-  el.onclick=()=>{statusOff.has(s)?statusOff.delete(s):statusOff.add(s);el.classList.toggle("off");renderDir()};
-  sc.appendChild(el);
+/* ---------- tabs ---------- */
+const TABS=[["tab-net","view-net"],["tab-dir","view-dir"]];
+function showTab(id){
+  TABS.forEach(([t,v])=>{
+    const on=t===id;
+    document.getElementById(t).setAttribute("aria-selected",on);
+    document.getElementById(v).hidden=!on;
+  });
+}
+TABS.forEach(([t])=>{
+  const el=document.getElementById(t);
+  el.onclick=()=>showTab(t);
+  el.onkeydown=e=>{
+    if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;
+    const i=TABS.findIndex(([x])=>x===t);
+    const n=TABS[(i+(e.key==="ArrowRight"?1:TABS.length-1))%TABS.length][0];
+    showTab(n); document.getElementById(n).focus();
+  };
 });
-document.getElementById("q").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderDir()});
 
 /* ---------- directory ---------- */
-function passes(p){
-  if(statusOff.has(p.status)) return false;
-  if(!query) return true;
-  return (p.id+" "+p.role+" "+p.org).toLowerCase().includes(query);
-}
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderDir()});
+function passes(p){ return !query || (p.id+" "+p.role+" "+p.org).toLowerCase().includes(query) }
+
 function renderDir(){
   const list=P.filter(passes);
   document.getElementById("grid").innerHTML=list.map(p=>{
-    const th=[...themesOf[p.id]].slice(0,8).map(t=>`<i style="background:${THEMES[t].color}"></i>`).join("");
-    const badge=p.status?`<span class="badge ${badgeClass(p.status)}">${p.status}</span>`:`<span class="badge b-rej">No status</span>`;
+    const th=[...themesOf[p.id]].map(t=>`<i style="background:${THEMES[t].color}"></i>`).join("");
     return `<button class="pcard${selected===p.id?" sel":""}" data-id="${p.id}">
       <div class="top">
         <span class="av" style="background:${hueOf(p.id)}">${initials(p.id)}</span>
         <span style="min-width:0">
           <span class="pname">${p.id}</span>
           ${p.role?`<div class="prole">${p.role}</div>`:""}
-          ${p.org?`<div class="porg">${p.org}</div>`:`<div class="porg">Organisation not recorded</div>`}
+          <div class="porg">${p.org||"Organisation not recorded"}</div>
         </span>
       </div>
       <div class="pfoot">
         <span class="dots">${th}</span>
         <span class="nconn">${deg[p.id]} link${deg[p.id]===1?"":"s"}</span>
-        ${badge}
       </div></button>`;
-  }).join("") || `<p class="empty">No one matches that filter.</p>`;
+  }).join("") || `<p class="empty">No one matches that search.</p>`;
   document.querySelectorAll(".pcard").forEach(b=>b.onclick=()=>select(b.dataset.id));
   document.getElementById("dirCount").textContent=`Showing ${list.length} of ${P.length} people.`;
 }
@@ -300,34 +299,34 @@ function renderDir(){
 function renderPanel(){
   const el=document.getElementById("panel");
   if(!selected){
-    el.innerHTML=`<h2>Directory</h2>
-      <p class="psub">Select anyone to see their role, links and collaborations.</p>
-      <div class="subhead">Themes</div>
+    el.innerHTML=`<h2>Themes</h2>
+      <p class="psub">Select anyone in either view to see their role, links and collaborations.</p>
       ${Object.values(THEMES).map(t=>`<div class="conn"><div class="who"><span class="dot" style="background:${t.color}"></span>${t.label}</div></div>`).join("")}`;
     return;
   }
   const p=byId[selected];
   const vis=links.filter(l=>!off.has(l.theme));
   const mine=vis.filter(l=>l.source.id===selected||l.target.id===selected);
+  const short=u=>u.replace(/^https?:\/\//,"").replace(/\/$/,"");
   const rows=[];
   if(p.org) rows.push(["Org",p.org]);
   if(p.role) rows.push(["Role",p.role]);
-  if(p.li) rows.push(["LinkedIn",`<a href="${p.li}" target="_blank" rel="noopener">${p.li.replace(/^https?:\/\//,"").replace(/\/$/,"")}</a>`]);
-  if(p.web) rows.push(["Open source",`<a href="${p.web}" target="_blank" rel="noopener">${p.web.replace(/^https?:\/\//,"").replace(/\/$/,"")}</a>`]);
-  rows.push(["Status",p.status?`<span class="badge ${badgeClass(p.status)}">${p.status}</span>`:`<span class="empty">Not recorded</span>`]);
+  if(p.li) rows.push(["LinkedIn",`<a href="${p.li}" target="_blank" rel="noopener">${short(p.li)}</a>`]);
+  if(p.web) rows.push(["Open source",`<a href="${p.web}" target="_blank" rel="noopener">${short(p.web)}</a>`]);
+  if(!rows.length) rows.push(["Details",`<span class="empty">Not recorded yet</span>`]);
   el.innerHTML=`
     <div class="ptop">
       <span class="av" style="background:${hueOf(p.id)}">${initials(p.id)}</span>
       <span style="min-width:0"><h2>${p.id}</h2>
       <div class="psub">${[p.role,p.org].filter(Boolean).join(" · ")||"Details not recorded"}</div></span>
+      <button class="closebtn" id="clr" title="Clear selection" aria-label="Clear selection">&times;</button>
     </div>
     <dl style="margin:0">${rows.map(([k,v])=>`<div class="meta"><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
     <div class="subhead">${mine.length} connection${mine.length===1?"":"s"}</div>
     ${mine.map(l=>{
       const o=l.source.id===selected?l.target.id:l.source.id;
       return `<div class="conn"><div class="who"><span class="dot" style="background:${THEMES[l.theme].color}"></span>${o}</div><div class="what">${l.text}</div></div>`;
-    }).join("")||`<p class="empty">No connections in the visible themes.</p>`}
-    <button class="clearbtn" id="clr">Clear selection</button>`;
+    }).join("")||`<p class="empty">No connections in the visible themes.</p>`}`;
   document.getElementById("clr").onclick=()=>select(null);
 }
 
@@ -386,273 +385,19 @@ Object.entries(THEMES).forEach(([k,v])=>{
 });
 const rst=document.createElement("button");
 rst.className="chip all"; rst.textContent="Reset";
-rst.onclick=()=>{off.clear();selected=null;query="";document.getElementById("q").value="";statusOff.clear();
+rst.onclick=()=>{off.clear();selected=null;query="";document.getElementById("q").value="";
   document.querySelectorAll(".chip").forEach(c=>c.classList.remove("off"));renderDir();renderPanel();renderNet()};
 legend.appendChild(rst);
 
-const noProfile=P.filter(p=>!p.status).map(p=>p.id);
+const noDetails=P.filter(p=>!p.org&&!p.role).map(p=>p.id);
 const noLinks=P.filter(p=>deg[p.id]===0).map(p=>p.id);
-document.getElementById("gaps").textContent=
-  `Gaps: ${noLinks.join(", ")||"none"} have no recorded connections. ${noProfile.join(", ")||"Nobody"} has no directory row.`;
+const bits=[];
+if(noLinks.length) bits.push(`${noLinks.join(", ")} ${noLinks.length===1?"has":"have"} no recorded connections.`);
+if(noDetails.length) bits.push(`${noDetails.join(", ")} ${noDetails.length===1?"has":"have"} no directory details.`);
+document.getElementById("gaps").textContent = bits.length ? "Gaps: "+bits.join(" ") : "";
 
+showTab("tab-net");
 renderDir(); renderPanel(); renderNet();
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Education and IndiaFOSS mapping</title>
-<style>
-:root{
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#faf9f5; --card:#ffffff; --ink:#1f1f1d; --ink2:#5f5e5a; --ink3:#8b8a83;
-  --line:#e3e1d8; --line2:#cfcdc2;
-}
-:root:not([data-theme="light"]){}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#1a1a18; --card:#232320; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
-    --line:#35342f; --line2:#46453f;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#1a1a18; --card:#232320; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
-  --line:#35342f; --line2:#46453f;
-}
-*,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{
-  margin:0; background:var(--bg); color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  font-size:16px; line-height:1.6;
-}
-.wrap{max-width:1100px; margin:0 auto; padding:28px 20px 48px}
-h1{font-size:22px; font-weight:500; margin:0 0 4px}
-.sub{color:var(--ink2); font-size:14px; margin:0 0 20px; max-width:62ch}
-.legend{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
-.chip{
-  display:inline-flex; align-items:center; gap:7px; cursor:pointer; user-select:none;
-  border:1px solid var(--line2); background:var(--card); color:var(--ink);
-  border-radius:999px; padding:5px 12px; font-size:13px; line-height:1.3;
-  transition:opacity .15s,border-color .15s;
-}
-.chip.off{opacity:.38}
-.chip .dot{width:9px; height:9px; border-radius:50%; flex:none}
-.chip.all{border-style:dashed}
-.panelrow{display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap}
-.graphbox{
-  flex:1 1 560px; min-width:300px; background:var(--card);
-  border:1px solid var(--line); border-radius:12px; overflow:hidden;
-}
-svg{display:block; width:100%; height:auto; touch-action:manipulation}
-.side{
-  flex:1 1 260px; min-width:240px; background:var(--card);
-  border:1px solid var(--line); border-radius:12px; padding:16px 18px;
-}
-.side h2{font-size:16px; font-weight:500; margin:0 0 2px}
-.side .hint{color:var(--ink3); font-size:13px; margin:0 0 12px}
-.conn{border-top:1px solid var(--line); padding:9px 0}
-.conn:first-of-type{border-top:none}
-.conn .who{font-size:14px; font-weight:500; display:flex; align-items:center; gap:7px}
-.conn .who .dot{width:8px; height:8px; border-radius:50%; flex:none}
-.conn .what{font-size:13px; color:var(--ink2); margin-top:2px}
-.node circle{cursor:pointer; stroke-width:1.5}
-.node text{font-size:11.5px; fill:var(--ink); pointer-events:none; paint-order:stroke;
-  stroke:var(--card); stroke-width:3px; stroke-linejoin:round}
-.dim{opacity:.12}
-.foot{color:var(--ink3); font-size:13px; margin-top:16px}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <h1>Education and IndiaFOSS mapping</h1>
-  <p class="sub">Each line is a possible collaboration between two people, coloured by theme. Click a name to see its connections. Click a theme to show or hide it.</p>
-
-  <div class="legend" id="legend"></div>
-
-  <div class="panelrow">
-    <div class="graphbox">
-      <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations between fourteen people"></svg>
-    </div>
-    <div class="side">
-      <h2 id="sideTitle">No one selected</h2>
-      <p class="hint" id="sideHint">Click any name in the diagram.</p>
-      <div id="sideBody"></div>
-    </div>
-  </div>
-
-  <p class="foot" id="count"></p>
-</div>
-
-<script src="d3.min.js"></script>
-<script>
-const THEMES = {
-  osai:     {label:"Open source AI in education", color:"#7F77DD"},
-  grafana:  {label:"Grafana Learn and FOSDEM",    color:"#1D9E75"},
-  b4b:      {label:"Build for Bharat Fellowship", color:"#D85A30"},
-  schools:  {label:"Government schools",          color:"#378ADD"},
-  tooling:  {label:"Open source tooling",         color:"#BA7517"},
-  curric:   {label:"Curriculum",                  color:"#D4537E"},
-  regional: {label:"Regional and networking",     color:"#639922"},
-  intro:    {label:"Introduced, no topic yet",    color:"#888780"}
-};
-
-const PEOPLE = ["Chandra R","Saket Choudhary","Mohit P Tahiliani","Hussain Nagaria","Dr. Sunil TT","Rinsa","Ankit","KC Sivaramakrishnan","Aaditeshwar Seth","James Reilly","Praveen Das","Jibu Elias","Richie Hartmann","Harsh Nisar"];
-
-const E = [
-["Chandra R","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
-["Saket Choudhary","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
-["Mohit P Tahiliani","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
-["Ankit","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
-["KC Sivaramakrishnan","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
-["Aaditeshwar Seth","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
-["Saket Choudhary","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["Mohit P Tahiliani","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["Dr. Sunil TT","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["Ankit","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["KC Sivaramakrishnan","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["Aaditeshwar Seth","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["James Reilly","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
-["Saket Choudhary","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
-["Mohit P Tahiliani","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
-["KC Sivaramakrishnan","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
-["Aaditeshwar Seth","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
-["Jibu Elias","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
-["Praveen Das","Harsh Nisar","b4b","Build for Bharat Fellowship and policy. Explore a joint cohort."],
-["Chandra R","Hussain Nagaria","schools","Government school tools and tech ambassador programme. Also post-school pathways."],
-["Chandra R","Rinsa","schools","Government school tools and tech ambassador programme."],
-["Chandra R","Dr. Sunil TT","schools","Software projects and other KITE government work."],
-["Chandra R","Praveen Das","schools","SchoolWiki and school programmes. Map overlaps."],
-["Saket Choudhary","Mohit P Tahiliani","tooling","Build open source tools together. Explore cross-collaboration."],
-["Saket Choudhary","KC Sivaramakrishnan","tooling","Build open source tools together. Explore cross-collaboration."],
-["Saket Choudhary","Aaditeshwar Seth","tooling","Build open source tools together. Explore cross-collaboration."],
-["Mohit P Tahiliani","KC Sivaramakrishnan","tooling","Build open source tools together. Explore cross-collaboration."],
-["Saket Choudhary","James Reilly","tooling","Open source tooling, student mentoring and job pathways."],
-["Saket Choudhary","Ankit","curric","Curriculum work. Compare approaches."],
-["Mohit P Tahiliani","Ankit","curric","Curriculum work. Compare approaches."],
-["Hussain Nagaria","Rinsa","curric","ERPNext, civil society tooling and curriculum."],
-["Chandra R","Mohit P Tahiliani","regional","Networking in rural Karnataka. Scope a joint pilot."],
-["Saket Choudhary","Rinsa","regional","Shared focus on Maharashtra and Bombay. Connect on regional work."],
-["Ankit","James Reilly","regional","Regional association work. Scope a shared role."],
-["James Reilly","Praveen Das","regional","Regional association work. Scope a shared role."],
-["Ankit","Praveen Das","intro","Already introduced. Agree next step."],
-["KC Sivaramakrishnan","Aaditeshwar Seth","intro","Already introduced. Agree next step."]
-];
-
-const off = new Set();
-const nodes = PEOPLE.map(id => ({id}));
-const links = E.map(([s,t,theme,text]) => ({source:s, target:t, theme, text}));
-const deg = {}; PEOPLE.forEach(p => deg[p]=0);
-links.forEach(l => { deg[l.source]++; deg[l.target]++; });
-
-const svg = d3.select("#g");
-const W = 720, H = 620;
-const linkG = svg.append("g").attr("fill","none");
-const nodeG = svg.append("g");
-
-const link = linkG.selectAll("line").data(links).join("line")
-  .attr("stroke", d => THEMES[d.theme].color)
-  .attr("stroke-width", 1.4)
-  .attr("stroke-opacity", .55);
-
-const node = nodeG.selectAll("g").data(nodes).join("g").attr("class","node")
-  .on("click", (e,d) => select(d.id));
-
-node.append("circle")
-  .attr("r", d => 6 + Math.min(deg[d.id],8) * 0.9)
-  .attr("fill", "var(--card)")
-  .attr("stroke", "var(--ink2)");
-
-node.append("text")
-  .attr("text-anchor","middle")
-  .attr("dy", d => -(10 + Math.min(deg[d.id],8)*0.9))
-  .text(d => d.id.replace("Dr. ","").split(" ").slice(0,2).join(" "));
-
-const sim = d3.forceSimulation(nodes)
-  .force("link", d3.forceLink(links).id(d=>d.id).distance(110).strength(.35))
-  .force("charge", d3.forceManyBody().strength(-620))
-  .force("center", d3.forceCenter(W/2, H/2))
-  .force("collide", d3.forceCollide(48))
-  .on("tick", tick);
-
-function tick(){
-  nodes.forEach(d => { d.x = Math.max(60, Math.min(W-60, d.x)); d.y = Math.max(34, Math.min(H-24, d.y)); });
-  link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
-      .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
-  node.attr("transform", d => `translate(${d.x},${d.y})`);
-}
-
-node.call(d3.drag()
-  .on("start", (e,d)=>{ if(!e.active) sim.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
-  .on("drag", (e,d)=>{ d.fx=e.x; d.fy=e.y; })
-  .on("end", (e,d)=>{ if(!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
-
-let selected = null;
-function select(id){
-  selected = (selected === id) ? null : id;
-  render();
-}
-
-function visible(l){ return !off.has(l.theme); }
-
-function render(){
-  const vis = links.filter(visible);
-  link.style("display", d => visible(d) ? null : "none");
-
-  const near = new Set();
-  if(selected){
-    near.add(selected);
-    vis.forEach(l => {
-      if(l.source.id === selected) near.add(l.target.id);
-      if(l.target.id === selected) near.add(l.source.id);
-    });
-  }
-  node.classed("dim", d => selected ? !near.has(d.id) : false);
-  link.classed("dim", d => selected ? (d.source.id !== selected && d.target.id !== selected) : false);
-
-  d3.select("#count").text(`${vis.length} of ${links.length} connections shown across ${PEOPLE.length} people.`);
-  renderSide(vis);
-}
-
-function renderSide(vis){
-  const t = document.getElementById("sideTitle");
-  const h = document.getElementById("sideHint");
-  const b = document.getElementById("sideBody");
-  if(!selected){
-    t.textContent = "No one selected";
-    h.textContent = "Click any name in the diagram.";
-    b.innerHTML = "";
-    return;
-  }
-  const mine = vis.filter(l => l.source.id === selected || l.target.id === selected);
-  t.textContent = selected;
-  h.textContent = mine.length === 1 ? "1 connection" : `${mine.length} connections`;
-  b.innerHTML = mine.map(l => {
-    const other = l.source.id === selected ? l.target.id : l.source.id;
-    const c = THEMES[l.theme].color;
-    return `<div class="conn"><div class="who"><span class="dot" style="background:${c}"></span>${other}</div><div class="what">${l.text}</div></div>`;
-  }).join("") || `<div class="conn"><div class="what">No connections in the visible themes.</div></div>`;
-}
-
-const legend = document.getElementById("legend");
-Object.entries(THEMES).forEach(([k,v]) => {
-  const el = document.createElement("button");
-  el.className = "chip";
-  el.innerHTML = `<span class="dot" style="background:${v.color}"></span>${v.label}`;
-  el.onclick = () => { off.has(k) ? off.delete(k) : off.add(k); el.classList.toggle("off"); render(); };
-  legend.appendChild(el);
-});
-const all = document.createElement("button");
-all.className = "chip all";
-all.textContent = "Reset";
-all.onclick = () => { off.clear(); selected = null; document.querySelectorAll(".chip").forEach(c=>c.classList.remove("off")); render(); };
-legend.appendChild(all);
-
-render();
 </script>
 </body>
 </html>
