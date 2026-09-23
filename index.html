@@ -465,7 +465,9 @@ node.append("circle").attr("fill",d=>hueOf(d.id)).attr("fill-opacity",.9).attr("
 node.append("circle").attr("class","hit").attr("r",22).attr("fill","transparent");  /* tap target */
 node.append("text").attr("text-anchor","middle");
 
-const zoom=d3.zoom().scaleExtent([.5,4]).on("zoom",e=>root.attr("transform",e.transform));
+/* scaleExtent starts at 1: the default view already fits everything, so
+   zooming out would only add empty margin. */
+const zoom=d3.zoom().scaleExtent([1,4]).on("zoom",e=>root.attr("transform",e.transform));
 svg.call(zoom).on("dblclick.zoom",null);
 
 let W,H,sim;
@@ -473,6 +475,14 @@ function layout(){
   const m=isMobile();
   W=m?380:720; H=m?560:620;
   svg.attr("viewBox",`0 0 ${W} ${H}`);
+
+  /* Pan is fenced to the canvas: translateExtent is the same rect the nodes
+     are clamped to in tick(), so no amount of dragging can push the graph
+     off screen. extent tells d3 how big the viewport is. Reset the current
+     transform too, since a pan valid at the old size may not be at the new one. */
+  zoom.extent([[0,0],[W,H]]).translateExtent([[0,0],[W,H]]);
+  svg.call(zoom.transform,d3.zoomIdentity);
+
   node.select("circle:not(.hit)").attr("r",d=>(m?5:6)+Math.min(deg[d.id],8)*(m?.7:.9));
   node.select("text")
     .attr("font-size",m?10:11.5)
@@ -488,17 +498,26 @@ function layout(){
     .force("center",d3.forceCenter(W/2,H/2))
     .force("collide",d3.forceCollide(m?26:48))
     .on("tick",()=>{
-      const pad=m?34:60;
-      nodes.forEach(d=>{d.x=Math.max(pad,Math.min(W-pad,d.x));d.y=Math.max(m?22:34,Math.min(H-24,d.y))});
+      const padX=m?34:60, padTop=m?22:34;
+      nodes.forEach(d=>{
+        d.x=Math.max(padX,Math.min(W-padX,d.x));
+        d.y=Math.max(padTop,Math.min(H-24,d.y));
+      });
       link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
       node.attr("transform",d=>`translate(${d.x},${d.y})`);
     });
   sim.alpha(1).restart();
 }
 
+/* Dragging a node is also clamped, so a node cannot be parked outside the
+   canvas and left there. */
 node.call(d3.drag()
   .on("start",(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y})
-  .on("drag",(e,d)=>{d.fx=e.x;d.fy=e.y})
+  .on("drag",(e,d)=>{
+    const m=isMobile(), padX=m?34:60, padTop=m?22:34;
+    d.fx=Math.max(padX,Math.min(W-padX,e.x));
+    d.fy=Math.max(padTop,Math.min(H-24,e.y));
+  })
   .on("end",(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null}));
 
 function renderNet(){
