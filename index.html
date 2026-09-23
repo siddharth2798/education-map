@@ -113,6 +113,17 @@ header p{color:var(--ink2);font-size:14px;margin:0 0 18px;max-width:64ch}
 .closebtn:hover{background:var(--card2);color:var(--ink)}
 .closebtn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 
+/* hover preview card, pointer devices on wide screens only */
+.preview{position:fixed;z-index:70;width:320px;max-width:calc(100vw - 16px);
+  background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:16px;
+  box-shadow:0 8px 28px rgba(0,0,0,.14);opacity:0;transform:translateY(4px);
+  transition:opacity .13s ease,transform .13s ease}
+.preview.on{opacity:1;transform:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .preview{box-shadow:0 8px 30px rgba(0,0,0,.55)}
+}
+.conn .who[data-id]{cursor:default}
+
 .graphbox{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 svg{display:block;width:100%;height:auto;touch-action:manipulation}
 .node circle{cursor:pointer;stroke-width:1.5}
@@ -165,6 +176,7 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
   .conn .what{font-size:13px}
   .closebtn{width:40px;height:40px;font-size:24px;margin:-6px -8px 0 auto;
     background:var(--card2);color:var(--ink2)}
+  .preview{display:none !important}
 }
 </style>
 </head>
@@ -245,7 +257,7 @@ const P=[
  {id:"Richard Hartmann",role:"Office of the CTO",org:"Grafana Labs",li:"https://www.linkedin.com/in/richih/",web:"https://grafana.com/docs/learning-hub/"},
  {id:"Vishal Arya",role:"Founder",org:"<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>",li:"https://linkedin.com/in/fossdot",web:"https://bodhya.net/"},
  {id:"Harsh Nisar",role:"Co-founder",org:"<a href=\"https://www.bharatdigital.io/\" target=\"_blank\" rel=\"noopener\"> Bharat Digital</a>",li:"https://in.linkedin.com/in/harsh-nisar-b8347588",web:"https://www.bharatdigital.io/fellowship"},
- {id:"G Vikram Chandra",role:"Assistant Professor",org:"<a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a>",li:"https://in.linkedin.com/in/vikramchandra-ml",web:"https://www.rgmcet.edu.in/"}
+ {id:"G Vikram Chandra",role:"Assistant Professor",org:"<a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a>",li:"https://in.linkedin.com/in/vikramchandra-ml",web:""}
 ];
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
 
@@ -292,11 +304,11 @@ const E=[
 ["Vishal Arya","Aaditeshwar Seth","regional","<a href=\"https://bodhya.net/\" target=\"_blank\" rel=\"noopener\"> Bodhya</a>'s work in Bihar. Leads for event speakers and mentors."],
 ["Vishal Arya","Rinsa","curric","Curriculum work for government schools and students."],
 ["Vishal Arya","Hussain Nagaria","curric","Curriculum work for government schools and students."],
-["G Vikram Chandra","Chandra R","tooling","Talk about projects by IT for Change, and how RGMCET students can contribute."],
-["G Vikram Chandra","Saket Choudhary","tooling","Talk about the lab Prof. Saket is associated with, and how RGMCET students can get involved."],
-["G Vikram Chandra","Mohit P Tahiliani","tooling","Talk about the lab Prof. Mohit is associated with, and how RGMCET students can get involved."],
-["G Vikram Chandra","KC Sivaramakrishnan","tooling","Talk about the lab Prof. KC is associated with, and how RGMCET students can get involved."],
-["G Vikram Chandra","Aaditeshwar Seth","tooling","Talk about the lab Prof. Aaditeshwar Seth is associated with, and how RGMCET students can get involved."],
+["G Vikram Chandra","Chandra R","tooling","Talk about projects by IT for Change, and how <a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a> students can contribute."],
+["G Vikram Chandra","Saket Choudhary","tooling","Talk about the lab Prof. Saket is associated with, and how <a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a> students can get involved."],
+["G Vikram Chandra","Mohit P Tahiliani","tooling","Talk about the lab Prof. Mohit is associated with, and how <a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a> students can get involved."],
+["G Vikram Chandra","KC Sivaramakrishnan","tooling","Talk about the lab Prof. KC is associated with, and how <a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a> students can get involved."],
+["G Vikram Chandra","Aaditeshwar Seth","tooling","Talk about the lab Prof. Aaditeshwar Seth is associated with, and how <a href=\"https://www.rgmcet.edu.in/\" target=\"_blank\" rel=\"noopener\">RGMCET</a> students can get involved."],
 ["G Vikram Chandra","Ankit","curric","Talk about Ankit's program, Road to Open Source."],
 ["G Vikram Chandra","James Reilly","tooling","Talk about involving students in more open source communities, projects and hiring."],
 ["G Vikram Chandra","Praveen Das","grants","Grants and other opportunities for student projects by Wikimedia Foundation."],
@@ -420,11 +432,74 @@ function renderPanel(){
     <div class="subhead">${mine.length} connection${mine.length===1?"":"s"}</div>
     ${mine.map(l=>{
       const o=l.source.id===selected?l.target.id:l.source.id;
-      return `<div class="conn"><div class="who"><span class="dot" style="background:${THEMES[l.theme].color}"></span>${o}</div><div class="what">${l.text}</div></div>`;
+      return `<div class="conn"><div class="who" data-id="${o}"><span class="dot" style="background:${THEMES[l.theme].color}"></span>${o}</div><div class="what">${l.text}</div></div>`;
     }).join("")||`<p class="empty">No connections in the visible themes.</p>`}`;
   document.getElementById("clr").onclick=()=>select(null);
+  wirePreviews(el);
   el.scrollTop=0;
 }
+
+/* ---------- hover preview (wide screens, pointer devices) ---------- */
+const preview=document.createElement("div");
+preview.className="preview"; preview.hidden=true;
+document.body.appendChild(preview);
+let pvShow=null, pvHide=null;
+
+const canPreview=()=>window.matchMedia("(hover:hover) and (pointer:fine) and (min-width:861px)").matches;
+
+function previewHTML(p){
+  const short=u=>u.replace(/^https?:\/\//,"").replace(/\/$/,"");
+  const rows=[];
+  if(p.org) rows.push(["Org",p.org]);
+  if(p.role) rows.push(["Role",p.role]);
+  if(p.li) rows.push(["LinkedIn",`<a href="${p.li}" target="_blank" rel="noopener">${short(p.li)}</a>`]);
+  if(p.web) rows.push(["Open source",`<a href="${p.web}" target="_blank" rel="noopener">${short(p.web)}</a>`]);
+  if(!rows.length) rows.push(["Details",`<span class="empty">Not recorded yet</span>`]);
+  return `<div class="ptop">
+      <span class="av" style="background:${hueOf(p.id)}">${initials(p.id)}</span>
+      <span style="min-width:0"><h2>${p.id}</h2>
+      <div class="psub">${[p.role,plain(p.org)].filter(Boolean).join(" \u00b7 ")||"Details not recorded"}</div></span>
+    </div>
+    <dl style="margin:0">${rows.map(([k,v])=>`<div class="meta"><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>`;
+}
+
+function placePreview(anchor){
+  const r=anchor.getBoundingClientRect();
+  const pw=preview.offsetWidth, ph=preview.offsetHeight, gap=12, edge=8;
+  let left=r.left-pw-gap;                       /* panel hugs the right, so open leftwards */
+  if(left<edge) left=r.right+gap;
+  left=Math.min(Math.max(left,edge),window.innerWidth-pw-edge);
+  let top=Math.min(r.top-8,window.innerHeight-ph-edge);
+  top=Math.max(top,edge);
+  preview.style.left=left+"px";
+  preview.style.top=top+"px";
+}
+
+function openPreview(id,anchor){
+  const p=byId[id]; if(!p) return;
+  preview.innerHTML=previewHTML(p);
+  preview.hidden=false;
+  placePreview(anchor);
+  requestAnimationFrame(()=>preview.classList.add("on"));
+}
+function closePreview(){
+  preview.classList.remove("on");
+  pvHide=setTimeout(()=>{preview.hidden=true;},140);
+}
+preview.addEventListener("mouseenter",()=>{clearTimeout(pvHide);});
+preview.addEventListener("mouseleave",closePreview);
+
+function wirePreviews(scope){
+  scope.querySelectorAll(".who[data-id]").forEach(el=>{
+    el.addEventListener("mouseenter",()=>{
+      if(!canPreview())return;
+      clearTimeout(pvHide); clearTimeout(pvShow);
+      pvShow=setTimeout(()=>openPreview(el.dataset.id,el),180);
+    });
+    el.addEventListener("mouseleave",()=>{ clearTimeout(pvShow); closePreview(); });
+  });
+}
+window.addEventListener("scroll",()=>{ if(!preview.hidden) closePreview() },true);
 
 function select(id,updateHash=true){
   const had=selected;
