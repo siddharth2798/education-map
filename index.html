@@ -161,8 +161,8 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 <script>
 const THEMES={
   osai:{label:"Open source AI in education",color:"#7F77DD"},
-  grafana:{label:"Grafana Learn and FOSSDEM",color:"#1D9E75"},
-  b4b:{label:"Build for Bharat Fellowship",color:"#D85A30"},
+  grafana:{label:"<a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>",color:"#1D9E75"},
+  b4b:{label:"<a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a>",color:"#D85A30"},
   schools:{label:"Government schools",color:"#378ADD"},
   tooling:{label:"Open source tooling",color:"#BA7517"},
   curric:{label:"Curriculum",color:"#D4537E"},
@@ -171,7 +171,7 @@ const THEMES={
 };
 
 const P=[
- {id:"Chandra R",role:"Head of Technology",org:"IT For Change",li:"",web:"https://itforchange.net/"},
+ {id:"Chandra R",role:"Head of Technology",org:"<a href=\"https://itforchange.net/\" target=\"_blank\" rel=\"noopener\">IT For Change</a>",li:"",web:"https://itforchange.net/"},
  {id:"Saket Choudhary",role:"Assistant Professor, Koita Centre for Digital Health",org:"IIT Bombay",li:"https://www.linkedin.com/in/saket-choudhary/",web:"https://www.kcdh.iitb.ac.in/"},
  {id:"Mohit P Tahiliani",role:"Associate Professor",org:"NITK Surathkal / COSH",li:"https://in.linkedin.com/in/mohittahiliani",web:"https://cosh.nitk.ac.in/about"},
  {id:"Hussain Nagaria",role:"Founder",org:"CS17 / BWH",li:"https://linkedin.com/in/buildwithhussain",web:"https://cs17.org/"},
@@ -185,7 +185,7 @@ const P=[
  {id:"Jibu Elias",role:"Lead, Responsible Computing Challenge in India",org:"Mozilla Foundation",li:"https://www.linkedin.com/in/jibuelias/",web:"https://www.mozillafoundation.org/en/"},
  {id:"Richard Hartmann",role:"Office of the CTO",org:"Grafana Labs",li:"https://www.linkedin.com/in/richih/",web:"https://grafana.com/docs/learning-hub/"},
  {id:"Vishal Arya",role:"Founder",org:"Bodhya",li:"https://linkedin.com/in/fossdot",web:"https://bodhya.net/"},
- {id:"Harsh Nisar",role:"Co-founder",org:"Bharat Digital",li:"https://in.linkedin.com/in/harsh-nisar-b8347588",web:"https://www.bharatdigital.io/fellowship"}
+ {id:"Harsh Nisar",role:"Co-founder",org:"<a href=\"https://www.bharatdigital.io/\" target=\"_blank\" rel=\"noopener\"> Bharat Digital</a>",li:"https://in.linkedin.com/in/harsh-nisar-b8347588",web:"https://www.bharatdigital.io/fellowship"}
 ];
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
 
@@ -196,23 +196,23 @@ const E=[
 ["Ankit","Jibu Elias","osai","Talk about Open source AI in education."],
 ["KC Sivaramakrishnan","Jibu Elias","osai","Talk about Open source AI in education."],
 ["Aaditeshwar Seth","Jibu Elias","osai","Talk about Open source AI in education."],
-["Saket Choudhary","Richard Hartmann","grafana","Talk about Grafana Learn and other events such as FOSSDEM."],
-["Mohit P Tahiliani","Richard Hartmann","grafana","Talk about Grafana Learn and events such as FOSSDEM. "],
-["Dr. Sunil TT","Richard Hartmann","grafana","Talk about Grafana Learn and events such as FOSSDEM. "],
-["Ankit","Richard Hartmann","grafana","Talk about Grafana Learn and events such as FOSSDEM."],
-["KC Sivaramakrishnan","Richard Hartmann","grafana","Talk about Grafana Learn and events such as FOSSDEM. "],
-["Aaditeshwar Seth","Richard Hartmann","grafana","Talk about Grafana Learn and events such as FOSSDEM. "],
-["James Reilly","Richard Hartmann","grafana","Talk about Grafana Learn and events such as FOSSDEM. "],
-["Saket Choudhary","Harsh Nisar","b4b","Talk about sending your students to Build for Bharat Fellowship"],
-["Mohit P Tahiliani","Harsh Nisar","b4b","Talk about sending your students to Build for Bharat Fellowship"],
-["KC Sivaramakrishnan","Harsh Nisar","b4b","Talk about sending your students to Build for Bharat Fellowship"],
-["Aaditeshwar Seth","Harsh Nisar","b4b","Talk about sending your students to Build for Bharat Fellowship"],
-["Jibu Elias","Harsh Nisar","b4b","Talk about the AIxSDLC workshop Bharat Digital runs for state governments and Bharat Digital Fellowship."],
-["Praveen Das","Harsh Nisar","b4b","Wikimedia Foundations involvement in the Build for Bharat Fellowship and AIxSDLC workshop"],
+["Saket Choudhary","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a></a> and other events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>."],
+["Mohit P Tahiliani","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
+["Dr. Sunil TT","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
+["Ankit","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>."],
+["KC Sivaramakrishnan","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
+["Aaditeshwar Seth","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
+["James Reilly","Richard Hartmann","grafana","Talk about <a href=\"https://grafana.com/docs/learning-hub/\" target=\"_blank\" rel=\"noopener\"> Grafana Learn</a> and events such as <a href=\"https://fosdem.org/2027/\" target=\"_blank\" rel=\"noopener\"> FOSSDEM</a>. "],
+["Saket Choudhary","Harsh Nisar","b4b","Talk about sending your students to <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a>"],
+["Mohit P Tahiliani","Harsh Nisar","b4b","Talk about sending your students to <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a>"],
+["KC Sivaramakrishnan","Harsh Nisar","b4b","Talk about sending your students to <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a>"],
+["Aaditeshwar Seth","Harsh Nisar","b4b","Talk about sending your students to <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a>"],
+["Jibu Elias","Harsh Nisar","b4b","Talk about the AIxSDLC workshop <a href=\"https://www.bharatdigital.io/\" target=\"_blank\" rel=\"noopener\"> Bharat Digital</a> runs for state governments and <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat</a> Fellowship."],
+["Praveen Das","Harsh Nisar","b4b","Wikimedia Foundations involvement in the <a href=\"https://www.bharatdigital.io/fellowship\" target=\"_blank\" rel=\"noopener\"> Build for Bharat Fellowship</a> and AIxSDLC workshop, if relevant"],
 ["Chandra R","Hussain Nagaria","schools","Tools and programs for government schools and students."],
 ["Chandra R","Rinsa","schools","Tools and programs for government schools and students."],
 ["Chandra R","Dr. Sunil TT","schools","Tools and programs for government schools and students."],
-["Chandra R","Praveen Das","schools","School programms such as Schoolwiki."],
+["Chandra R","Praveen Das","schools","School programms such as <a href=\"https://schoolwiki.in/index.php?title=Schoolwiki&%2FAbout=&mobileaction=toggle_view_desktop\" target=\"_blank\" rel=\"noopener\"> Schoolwiki</a>."],
 ["Saket Choudhary","Mohit P Tahiliani","tooling","Collaborative project building and student exchange"],
 ["Saket Choudhary","KC Sivaramakrishnan","tooling","Collaborative project building and student exchange"],
 ["Saket Choudhary","Aaditeshwar Seth","tooling","Collaborative project building and student exchange"],
