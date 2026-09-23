@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Education and IndiaFOSS mapping</title>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#faf9f5; --card:#ffffff; --ink:#1f1f1d; --ink2:#5f5e5a; --ink3:#8b8a83;
+  --line:#e3e1d8; --line2:#cfcdc2;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a18; --card:#232320; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
+    --line:#35342f; --line2:#46453f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1a1a18; --card:#232320; --ink:#f0eee6; --ink2:#b3b1a8; --ink3:#86847d;
+  --line:#35342f; --line2:#46453f;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:16px; line-height:1.6;
+}
+.wrap{max-width:1100px; margin:0 auto; padding:28px 20px 48px}
+h1{font-size:22px; font-weight:500; margin:0 0 4px}
+.sub{color:var(--ink2); font-size:14px; margin:0 0 20px; max-width:62ch}
+.legend{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+.chip{
+  display:inline-flex; align-items:center; gap:7px; cursor:pointer; user-select:none;
+  border:1px solid var(--line2); background:var(--card); color:var(--ink);
+  border-radius:999px; padding:5px 12px; font-size:13px; line-height:1.3;
+  transition:opacity .15s,border-color .15s;
+}
+.chip.off{opacity:.38}
+.chip .dot{width:9px; height:9px; border-radius:50%; flex:none}
+.chip.all{border-style:dashed}
+.panelrow{display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap}
+.graphbox{
+  flex:1 1 560px; min-width:300px; background:var(--card);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden;
+}
+svg{display:block; width:100%; height:auto; touch-action:manipulation}
+.side{
+  flex:1 1 260px; min-width:240px; background:var(--card);
+  border:1px solid var(--line); border-radius:12px; padding:16px 18px;
+}
+.side h2{font-size:16px; font-weight:500; margin:0 0 2px}
+.side .hint{color:var(--ink3); font-size:13px; margin:0 0 12px}
+.conn{border-top:1px solid var(--line); padding:9px 0}
+.conn:first-of-type{border-top:none}
+.conn .who{font-size:14px; font-weight:500; display:flex; align-items:center; gap:7px}
+.conn .who .dot{width:8px; height:8px; border-radius:50%; flex:none}
+.conn .what{font-size:13px; color:var(--ink2); margin-top:2px}
+.node circle{cursor:pointer; stroke-width:1.5}
+.node text{font-size:11.5px; fill:var(--ink); pointer-events:none; paint-order:stroke;
+  stroke:var(--card); stroke-width:3px; stroke-linejoin:round}
+.dim{opacity:.12}
+.foot{color:var(--ink3); font-size:13px; margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Education and IndiaFOSS mapping</h1>
+  <p class="sub">Each line is a possible collaboration between two people, coloured by theme. Click a name to see its connections. Click a theme to show or hide it.</p>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="panelrow">
+    <div class="graphbox">
+      <svg id="g" viewBox="0 0 720 620" role="img" aria-label="Network diagram of collaborations between fourteen people"></svg>
+    </div>
+    <div class="side">
+      <h2 id="sideTitle">No one selected</h2>
+      <p class="hint" id="sideHint">Click any name in the diagram.</p>
+      <div id="sideBody"></div>
+    </div>
+  </div>
+
+  <p class="foot" id="count"></p>
+</div>
+
+<script src="d3.min.js"></script>
+<script>
+const THEMES = {
+  osai:     {label:"Open source AI in education", color:"#7F77DD"},
+  grafana:  {label:"Grafana Learn and FOSDEM",    color:"#1D9E75"},
+  b4b:      {label:"Build for Bharat Fellowship", color:"#D85A30"},
+  schools:  {label:"Government schools",          color:"#378ADD"},
+  tooling:  {label:"Open source tooling",         color:"#BA7517"},
+  curric:   {label:"Curriculum",                  color:"#D4537E"},
+  regional: {label:"Regional and networking",     color:"#639922"},
+  intro:    {label:"Introduced, no topic yet",    color:"#888780"}
+};
+
+const PEOPLE = ["Chandra R","Saket Choudhary","Mohit P Tahiliani","Hussain Nagaria","Dr. Sunil TT","Rinsa","Ankit","KC Sivaramakrishnan","Aaditeshwar Seth","James Reilly","Praveen Das","Jibu Elias","Richie Hartmann","Harsh Nisar"];
+
+const E = [
+["Chandra R","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
+["Saket Choudhary","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
+["Mohit P Tahiliani","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
+["Ankit","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
+["KC Sivaramakrishnan","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
+["Aaditeshwar Seth","Jibu Elias","osai","Open source AI in education. Explore a joint session."],
+["Saket Choudhary","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["Mohit P Tahiliani","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["Dr. Sunil TT","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["Ankit","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["KC Sivaramakrishnan","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["Aaditeshwar Seth","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["James Reilly","Richie Hartmann","grafana","Grafana Learn and events such as FOSDEM. Scope involvement."],
+["Saket Choudhary","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
+["Mohit P Tahiliani","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
+["KC Sivaramakrishnan","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
+["Aaditeshwar Seth","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
+["Jibu Elias","Harsh Nisar","b4b","Build for Bharat Fellowship. Explore a joint cohort."],
+["Praveen Das","Harsh Nisar","b4b","Build for Bharat Fellowship and policy. Explore a joint cohort."],
+["Chandra R","Hussain Nagaria","schools","Government school tools and tech ambassador programme. Also post-school pathways."],
+["Chandra R","Rinsa","schools","Government school tools and tech ambassador programme."],
+["Chandra R","Dr. Sunil TT","schools","Software projects and other KITE government work."],
+["Chandra R","Praveen Das","schools","SchoolWiki and school programmes. Map overlaps."],
+["Saket Choudhary","Mohit P Tahiliani","tooling","Build open source tools together. Explore cross-collaboration."],
+["Saket Choudhary","KC Sivaramakrishnan","tooling","Build open source tools together. Explore cross-collaboration."],
+["Saket Choudhary","Aaditeshwar Seth","tooling","Build open source tools together. Explore cross-collaboration."],
+["Mohit P Tahiliani","KC Sivaramakrishnan","tooling","Build open source tools together. Explore cross-collaboration."],
+["Saket Choudhary","James Reilly","tooling","Open source tooling, student mentoring and job pathways."],
+["Saket Choudhary","Ankit","curric","Curriculum work. Compare approaches."],
+["Mohit P Tahiliani","Ankit","curric","Curriculum work. Compare approaches."],
+["Hussain Nagaria","Rinsa","curric","ERPNext, civil society tooling and curriculum."],
+["Chandra R","Mohit P Tahiliani","regional","Networking in rural Karnataka. Scope a joint pilot."],
+["Saket Choudhary","Rinsa","regional","Shared focus on Maharashtra and Bombay. Connect on regional work."],
+["Ankit","James Reilly","regional","Regional association work. Scope a shared role."],
+["James Reilly","Praveen Das","regional","Regional association work. Scope a shared role."],
+["Ankit","Praveen Das","intro","Already introduced. Agree next step."],
+["KC Sivaramakrishnan","Aaditeshwar Seth","intro","Already introduced. Agree next step."]
+];
+
+const off = new Set();
+const nodes = PEOPLE.map(id => ({id}));
+const links = E.map(([s,t,theme,text]) => ({source:s, target:t, theme, text}));
+const deg = {}; PEOPLE.forEach(p => deg[p]=0);
+links.forEach(l => { deg[l.source]++; deg[l.target]++; });
+
+const svg = d3.select("#g");
+const W = 720, H = 620;
+const linkG = svg.append("g").attr("fill","none");
+const nodeG = svg.append("g");
+
+const link = linkG.selectAll("line").data(links).join("line")
+  .attr("stroke", d => THEMES[d.theme].color)
+  .attr("stroke-width", 1.4)
+  .attr("stroke-opacity", .55);
+
+const node = nodeG.selectAll("g").data(nodes).join("g").attr("class","node")
+  .on("click", (e,d) => select(d.id));
+
+node.append("circle")
+  .attr("r", d => 6 + Math.min(deg[d.id],8) * 0.9)
+  .attr("fill", "var(--card)")
+  .attr("stroke", "var(--ink2)");
+
+node.append("text")
+  .attr("text-anchor","middle")
+  .attr("dy", d => -(10 + Math.min(deg[d.id],8)*0.9))
+  .text(d => d.id.replace("Dr. ","").split(" ").slice(0,2).join(" "));
+
+const sim = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink(links).id(d=>d.id).distance(110).strength(.35))
+  .force("charge", d3.forceManyBody().strength(-620))
+  .force("center", d3.forceCenter(W/2, H/2))
+  .force("collide", d3.forceCollide(48))
+  .on("tick", tick);
+
+function tick(){
+  nodes.forEach(d => { d.x = Math.max(60, Math.min(W-60, d.x)); d.y = Math.max(34, Math.min(H-24, d.y)); });
+  link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
+      .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+  node.attr("transform", d => `translate(${d.x},${d.y})`);
+}
+
+node.call(d3.drag()
+  .on("start", (e,d)=>{ if(!e.active) sim.alphaTarget(.3).restart(); d.fx=d.x; d.fy=d.y; })
+  .on("drag", (e,d)=>{ d.fx=e.x; d.fy=e.y; })
+  .on("end", (e,d)=>{ if(!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
+
+let selected = null;
+function select(id){
+  selected = (selected === id) ? null : id;
+  render();
+}
+
+function visible(l){ return !off.has(l.theme); }
+
+function render(){
+  const vis = links.filter(visible);
+  link.style("display", d => visible(d) ? null : "none");
+
+  const near = new Set();
+  if(selected){
+    near.add(selected);
+    vis.forEach(l => {
+      if(l.source.id === selected) near.add(l.target.id);
+      if(l.target.id === selected) near.add(l.source.id);
+    });
+  }
+  node.classed("dim", d => selected ? !near.has(d.id) : false);
+  link.classed("dim", d => selected ? (d.source.id !== selected && d.target.id !== selected) : false);
+
+  d3.select("#count").text(`${vis.length} of ${links.length} connections shown across ${PEOPLE.length} people.`);
+  renderSide(vis);
+}
+
+function renderSide(vis){
+  const t = document.getElementById("sideTitle");
+  const h = document.getElementById("sideHint");
+  const b = document.getElementById("sideBody");
+  if(!selected){
+    t.textContent = "No one selected";
+    h.textContent = "Click any name in the diagram.";
+    b.innerHTML = "";
+    return;
+  }
+  const mine = vis.filter(l => l.source.id === selected || l.target.id === selected);
+  t.textContent = selected;
+  h.textContent = mine.length === 1 ? "1 connection" : `${mine.length} connections`;
+  b.innerHTML = mine.map(l => {
+    const other = l.source.id === selected ? l.target.id : l.source.id;
+    const c = THEMES[l.theme].color;
+    return `<div class="conn"><div class="who"><span class="dot" style="background:${c}"></span>${other}</div><div class="what">${l.text}</div></div>`;
+  }).join("") || `<div class="conn"><div class="what">No connections in the visible themes.</div></div>`;
+}
+
+const legend = document.getElementById("legend");
+Object.entries(THEMES).forEach(([k,v]) => {
+  const el = document.createElement("button");
+  el.className = "chip";
+  el.innerHTML = `<span class="dot" style="background:${v.color}"></span>${v.label}`;
+  el.onclick = () => { off.has(k) ? off.delete(k) : off.add(k); el.classList.toggle("off"); render(); };
+  legend.appendChild(el);
+});
+const all = document.createElement("button");
+all.className = "chip all";
+all.textContent = "Reset";
+all.onclick = () => { off.clear(); selected = null; document.querySelectorAll(".chip").forEach(c=>c.classList.remove("off")); render(); };
+legend.appendChild(all);
+
+render();
+</script>
+</body>
+</html>
