@@ -185,7 +185,8 @@ svg{display:block;width:100%;height:auto;touch-action:manipulation}
 
 <header>
   <h1>Education at IndiaFOSS</h1>
-  <p>Directory and network of people run initiatives on Open Source in Education.</p>
+  <p>Directory and network of people who run initiatives around Open Source in Education. 
+    Made this map for the invite only gathering at IndiaFOSS 2026 where we want to help the attendees easily learn about initiatives they could work on or discussions they can have. Just search for your name or anyone else's to see all the details and potential connections.</p>
 </header>
 
 <!-- <div class="stats" id="stats"></div> -->
@@ -429,11 +430,11 @@ function renderPanel(){
       <button class="closebtn" id="clr" title="Clear selection" aria-label="Clear selection">&times;</button>
     </div>
     <dl style="margin:0">${rows.map(([k,v])=>`<div class="meta"><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
-    <div class="subhead">${mine.length} connection${mine.length===1?"":"s"}</div>
+    <div class="subhead">${mine.length} potential connection${mine.length===1?"":"s"}</div>
     ${mine.map(l=>{
       const o=l.source.id===selected?l.target.id:l.source.id;
       return `<div class="conn"><div class="who" data-id="${o}"><span class="dot" style="background:${THEMES[l.theme].color}"></span>${o}</div><div class="what">${l.text}</div></div>`;
-    }).join("")||`<p class="empty">No connections in the visible themes.</p>`}`;
+    }).join("")||`<p class="empty">No potential connections in the visible themes.</p>`}`;
   document.getElementById("clr").onclick=()=>select(null);
   wirePreviews(el);
   el.scrollTop=0;
@@ -603,7 +604,7 @@ function renderNet(){
     vis.forEach(l=>{if(l.source.id===selected)near.add(l.target.id);if(l.target.id===selected)near.add(l.source.id)})}
   node.classed("dim",d=>selected?!near.has(d.id):false);
   link.classed("dim",d=>selected?(d.source.id!==selected&&d.target.id!==selected):false);
-  document.getElementById("count").textContent=`${vis.length} of ${links.length} connections shown.`;
+  document.getElementById("count").textContent=`${vis.length} of ${links.length} potential connections shown.`;
 }
 
 let wasMobile=isMobile(), rt=null;
@@ -617,7 +618,7 @@ window.addEventListener("resize",()=>{
 const noDetails=P.filter(p=>!p.org&&!p.role).map(p=>p.id);
 const noLinks=P.filter(p=>deg[p.id]===0).map(p=>p.id);
 const bits=[];
-if(noLinks.length) bits.push(`${noLinks.join(", ")} ${noLinks.length===1?"has":"have"} no recorded connections.`);
+if(noLinks.length) bits.push(`${noLinks.join(", ")} ${noLinks.length===1?"has":"have"} no recorded potential connections.`);
 if(noDetails.length) bits.push(`${noDetails.join(", ")} ${noDetails.length===1?"has":"have"} no directory details.`);
 document.getElementById("gaps").textContent = bits.length ? "Gaps: "+bits.join(" ") : "";
 
