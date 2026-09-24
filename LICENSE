@@ -20,3 +20,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  
+This licence covers the code in this repository only.
+
+The directory content (names, roles, organisations and the suggested
+conversation topics in index.html) is licensed separately under
+Creative Commons Attribution 4.0 International (CC BY 4.0).
+See https://creativecommons.org/licenses/by/4.0/
+
+Third-party components bundled in this repository keep their own licences.
+See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)
